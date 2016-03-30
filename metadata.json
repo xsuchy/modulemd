@@ -1,0 +1,19 @@
+{
+	"version" : 0.001,
+	"data" : {
+		"name" : "foo",
+		"version" : "1.23-1",
+		"license" : {
+			"module" : [ "MIT" ],
+			"content" : [ "Beerware", "GPLv2+", "zlib" ]
+		},
+		"requires" : {
+			"core" : 0
+		},
+		"references" : {
+			"community" : "http://www.example.com/",
+			"documentation" : "http://www.example.com/",
+			"tracker" : "http://www.example.com/"
+		},
+	}
+}
