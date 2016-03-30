@@ -1,12 +1,11 @@
-Module metadata references
-
 metadata.json:
         A simple metadata template that should be a part of an RPM repository.
         It currently doesn't contain a link to the repository itself as the
         client already knows it anyway.  It doesn't contain a list of available
         components either, for similar reasons.
 
-        The format should be mostly self-explanatory but just to be clear:
+        The format should be mostly self-explanatory but just to be clear.
+
         version:
                 Metadata format version.
         data:
