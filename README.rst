@@ -35,3 +35,12 @@ metadata.json:
                 Optional.  Upstream documentation.
         data/references/tracker:
                 Optional.  Upstream release issue tracker.
+        components:
+                Optional.  Extra data for module components.
+        components/install:
+                Optional.  Lists module components that should be installed when
+                the module is activated.
+        components/install/type:
+                Package type of the components, for example "rpm".
+        components/install/packages:
+                List of packages of the given type that should be installed.
