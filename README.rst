@@ -7,7 +7,8 @@ metadata.json:
         The format should be mostly self-explanatory but just to be clear.
 
         version:
-                Metadata format version.
+                Metadata format version, an integer.
+                This should only change when incompatible changes are introduced.
         data:
                 The main metadata structure.
         data/name:
@@ -16,6 +17,7 @@ metadata.json:
                 Module version.
                 Currently suggested format is the version of the main module
                 component plus the module's version, separated by a hyphen.
+                Much like the RPM's VR scheme.
         data/license:
                 Licenses details for the module.
         data/license/module:

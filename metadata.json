@@ -1,5 +1,5 @@
 {
-	"version" : 0.001,
+	"version" : 0,
 	"data" : {
 		"name" : "foo",
 		"version" : "1.23-1",
@@ -14,7 +14,7 @@
 			]
 		},
 		"requires" : {
-			"core" : 0
+			"core" : "23-1"
 		},
 		"references" : {
 			"community" : "http://www.example.com/",
