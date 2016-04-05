@@ -22,15 +22,22 @@
 			"tracker" : "http://www.example.com/"
 		},
 		"components" : {
-			"install" : [
+			"packages" : [
+				"bar",
+				"baz",
+				"foo",
 				{
-					"type" : "rpm",
-					"packages" : [
-						"foo",
-						"extrapackage"
+					"names" : [
+						"foo-extras"
+					],
+					"arch" : [
+						"i686",
+						"x86_64"
 					]
-				}
-			]
+				},
+				"xyz"
+			],
+			"dependencies" : true,
 		}
 	}
 }

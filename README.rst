@@ -39,10 +39,22 @@ metadata.json:
                 Optional.  Upstream release issue tracker.
         components:
                 Optional.  Extra data for module components.
-        components/install:
-                Optional.  Lists module components that should be installed when
-                the module is activated.
-        components/install/type:
-                Package type of the components, for example "rpm".
-        components/install/packages:
-                List of packages of the given type that should be installed.
+        components/packages:
+                Optional.  A list of packages defining the module.  These should
+                typically be autoinstalled when the module is enabled.  The list
+                may contain objects with specific package constraints as well as
+                simple package names.  These are the final package names.  Note
+                other packages created from the source package, such as subpackages or
+                debuginfo, as well as source packages, are also included in the module.
+                However, they're not meant to be autoinstalled.
+        components/packages/names:
+                A list of packages to which the additional constraints apply.
+                If no constraints are defined, objects with only the names property
+                have the equal meaning as simple strings in components/packages.
+        components/packages/arch:
+                Optional. A list of architectures these packages should be available on.
+                By default, all available architectures are available.
+        components/dependencies:
+                Control whether the module's components' dependencies should be
+                included in the module or not.  True for dependency inclusion, false
+                otherwise.
