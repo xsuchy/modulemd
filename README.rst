@@ -18,6 +18,10 @@ metadata.json:
                 Currently suggested format is the version of the main module
                 component plus the module's version, separated by a hyphen.
                 Much like the RPM's VR scheme.
+        data/summary:
+                A short summary of the module's purpose.
+        data/description:
+                A short description of the module.
         data/license:
                 Licenses details for the module.
         data/license/module:
@@ -25,8 +29,12 @@ metadata.json:
                 SPEC files, custom patches, the metadata file and similar.
         data/license/content:
                 The license of the module content, i.e. RPMs.
+        data/buildrequires:
+                A dictionary of the module's build dependencies, with keys being
+                the required modules' names and the values the minimum required
+                versions of these.
         data/requires:
-                A dictionary of the module's dependencies, with keys being
+                A dictionary of the module's runtime dependencies, with keys being
                 the required modules' names and the values the minimum required
                 versions of these.
         data/references:
