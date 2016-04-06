@@ -51,10 +51,7 @@ metadata.json:
                 Optional.  A list of packages defining the module.  These should
                 typically be autoinstalled when the module is enabled.  The list
                 may contain objects with specific package constraints as well as
-                simple package names.  These are the final package names.  Note
-                other packages created from the source package, such as subpackages or
-                debuginfo, as well as source packages, are also included in the module.
-                However, they're not meant to be autoinstalled.
+                simple package names.  These are the final package names.
         components/packages/names:
                 A list of packages to which the additional constraints apply.
                 If no constraints are defined, objects with only the names property
@@ -66,3 +63,7 @@ metadata.json:
                 Control whether the module's components' dependencies should be
                 included in the module or not.  True for dependency inclusion, false
                 otherwise.
+        components/fulltree:
+                Control whether related packages such as debuginfo or unlisted
+                subpackages should be included in the module as well.  These wouldn't
+                be autoinstalled, just present.  True for inclusion, false otherwise.

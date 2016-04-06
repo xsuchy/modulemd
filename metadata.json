@@ -42,7 +42,8 @@
 				},
 				"xyz"
 			],
-			"dependencies" : true
+			"dependencies" : true,
+			"fulltree" : true
 		}
 	}
 }
