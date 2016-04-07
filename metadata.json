@@ -28,19 +28,11 @@
 		},
 		"components" : {
 			"packages" : [
-				"bar",
-				"baz",
-				"foo",
-				{
-					"names" : [
-						"foo-extras"
-					],
-					"arch" : [
-						"i686",
-						"x86_64"
-					]
-				},
-				"xyz"
+				{ "bar" : {} },
+				{ "baz" : {} },
+				{ "foo" : {} },
+				{ "foo-extras" : { "arch" : [ "i686", "x86_64" ] } },
+				{ "xyz" : {} }
 			],
 			"dependencies" : true,
 			"fulltree" : true

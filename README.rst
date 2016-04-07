@@ -48,15 +48,11 @@ metadata.json:
         components:
                 Optional.  Extra data for module components.
         components/packages:
-                Optional.  A list of packages defining the module.  These should
-                typically be autoinstalled when the module is enabled.  The list
-                may contain objects with specific package constraints as well as
-                simple package names.  These are the final package names.
-        components/packages/names:
-                A list of packages to which the additional constraints apply.
-                If no constraints are defined, objects with only the names property
-                have the equal meaning as simple strings in components/packages.
-        components/packages/arch:
+                A list of objects representing the packages defining the module.
+                These should only have one property with its value being an object
+                with packaging constraints.  These packages should typically be
+                autoinstalled when the module is enabled.
+        components/packages/<pkgname>/arch:
                 Optional. A list of architectures these packages should be available on.
                 By default, all available architectures are available.
         components/dependencies:
