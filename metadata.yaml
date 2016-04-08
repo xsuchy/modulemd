@@ -1,0 +1,62 @@
+# Module metadata format version
+version: 0
+data:
+        # Module name
+        name: foo
+        # Module version-release
+        version: 1.23-1
+        # A short summary describing the module
+        summary: An example module
+        # A verbose description of the module
+        description: >
+                A module for the demonstration of the metadata format. Also,
+                the obligatory lorem ipsum dolor sit amet goes right here.
+        # Module and content licenses in the Fedora license identifier format
+        license:
+                # Module license
+                # This list covers licenses used for the module metadata,
+                # SPEC files or extra patches.
+                module:
+                        - MIT
+                # Content license
+                # A list of licenses used by the packages in the module.
+                content:
+                        - Beerware
+                        - GPLv2+
+                        - zlib
+        # Build-time dependencies of this module
+        # Keys are module names, values are the minimum required versions
+        buildrequires:
+                - core: 24-1
+        # Run-time dependencies of this module
+        # Keys are module names, values are the minimum required versions
+        requires:
+                - core: 24-1
+        # References to external resources, typically upstream
+        references:
+                # Upstream community website, if it exists
+                community: http://www.example.com/
+                # Upstream documentation, if it exists
+                documentation: http://www.example.com/
+                # Upstream bug tracker, if it exists
+                tracker: http://www.example.com/
+        # Functional components of the module
+        components:
+                # Main packages of the module; these are typically autoinstalled
+                # The keys are package names, the values structures with
+                # possible extra information or constraints.
+                packages:
+                        bar: {}
+                        baz: {}
+                        foo: {}
+                        foo-extras:
+                                # foo-extras is only available on the
+                                # listed architectures
+                                arch: [ i686, x86_64 ]
+                        xyz: {}
+                # Should this module include dependencies of its packages
+                # that are not provided by any of the modules it depends on?
+                dependencies: True
+                # Should this module include all the packages generated from the
+                # same source packages as the ones listed above?
+                fulltree: True
