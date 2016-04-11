@@ -52,7 +52,11 @@ data:
                         foo-extras:
                                 # foo-extras is only available on the
                                 # listed architectures
-                                arch: [ i686, x86_64 ]
+                                arches: [ i686, x86_64 ]
+                                # a list of architectures with multilib
+                                # installs, i.e. both i686 and x86_64
+                                # versions will be installed on x86_64
+                                multilib: [ x86_64 ]
                         xyz: {}
                 # Should this module include dependencies of its packages
                 # that are not provided by any of the modules it depends on?
