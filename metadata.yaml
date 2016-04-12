@@ -24,10 +24,6 @@ data:
                         - Beerware
                         - GPLv2+
                         - zlib
-        # Build-time dependencies of this module
-        # Keys are module names, values are the minimum required versions
-        buildrequires:
-                - core: 24-1
         # Run-time dependencies of this module
         # Keys are module names, values are the minimum required versions
         requires:
