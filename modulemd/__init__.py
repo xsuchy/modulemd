@@ -1,34 +1,90 @@
 import yaml
 
-"""
-...
-"""
-
 supported_mdversions = ( 0, )
 
 class ModuleMetadata():
+	def __init__(self):
+		self.mdversion = max(supported_mdversions)
+		self.name = None
+		self.version = None
+		self.summary = None
+		self.description = None
+		self.module_licenses = []
+		self.content_licenses = []
+		self.requires = dict()
+		self.community = None
+		self.documentation = None
+		self.tracker = None
+
 	def load(self, f):
-		"""
-		...
-		"""
+		with open(f, "r") as infile:
+			data = infile.read()
+		self.loads(data)
 
 	def loads(self, s):
-		"""
-		...
-		"""
 		yml = yaml.safe_load(s)
+		if yml["document"] != "modulemd":
+			raise ValueError("The supplied data isn't a valid modulemd document")
+		if yml["version"] not in supported_mdversions:
+			raise ValueError("The supplied metadata version isn't supported")
 		self.mdversion = yml["version"]
+		self.name = yml["data"]["name"]
 		self.version = yml["data"]["version"]
+		self.summary = yml["data"]["summary"]
+		self.description = yml["data"]["description"]
+		self.module_licenses = yml["data"]["license"]["module"]
+		if "content" in yml["data"]["license"]:
+			self.content_licenses = yml["data"]["license"]["content"]
+		if "requires" in yml["data"]:
+			self.requires = yml["data"]["requires"]
+		if "references" in yml["data"]:
+			if "community" in yml["data"]["references"]:
+				self.community = yml["data"]["references"]["community"]
+			if "documentation" in yml["data"]["references"]:
+				self.document = yml["data"]["references"]["documentation"]
+			if "tracker" in yml["data"]["references"]:
+				self.tracker = yml["data"]["references"]["tracker"]
+		# TODO: components
 
 	def dump(self, f):
-		"""
-		...
-		"""
+		data = self.dumps()
+		with open(f, "w") as outfile:
+			outfile.write(data)
 
 	def dumps(self):
-		"""
-		...
-		"""
+		if not self.validate:
+			raise Exception("Metadata validation failed")
+		data = dict()
+		# header
+		data["document"] = "modulemd"
+		data["version"] = self.mdversion
+		# data
+		data["data"] = dict()
+		data["data"]["name"] = self.name
+		data["data"]["version"] = self.version
+		data["data"]["summary"] = self.summary
+		data["data"]["description"] = self.description
+		data["data"]["license"] = dict()
+		data["data"]["license"]["module"] = self.module_licenses
+		if self.content_licenses:
+			data["data"]["license"]["content"] = self.content_licenses
+		if self.requires:
+			data["data"]["requires"] = self.requires
+		if self.community or self.documentation or self.tracker:
+			data["data"]["references"] = dict()
+			if self.community:
+				data["data"]["references"]["community"] = self.community
+			if self.documentation:
+				data["data"]["references"]["documentation"] = self.documentation
+			if self.tracker:
+				data["data"]["references"]["tracker"] = self.tracker
+		# TODO: components
+		return yaml.dump(data)
+
+	def validate(self):
+		# TODO: do some actual validation
+		return True
+
 
 	@property
 	def mdversion(self):
@@ -36,8 +92,6 @@ class ModuleMetadata():
 
 	@mdversion.setter
 	def mdversion(self, i):
-		if i not in supported_mdversions:
-			raise ValueError("Unsupported metadata version:", i)
 		self._mdversion = i
 
 	@property
@@ -46,8 +100,6 @@ class ModuleMetadata():
 
 	@name.setter
 	def name(self, s):
-		if not s:
-			raise ValueError("Missing a required field: name")
 		self._name = s
 
 	@property
@@ -56,8 +108,6 @@ class ModuleMetadata():
 
 	@version.setter
 	def version(self, s):
-		if not s:
-			raise ValueError("Missing a required field: version")
 		self._version = s
 
 	@property
@@ -66,8 +116,6 @@ class ModuleMetadata():
 
 	@summary.setter
 	def summary(self, s):
-		if not s:
-			raise ValueError("Missing a required field: summary")
 		self._summary = s
 
 	@property
@@ -76,8 +124,6 @@ class ModuleMetadata():
 
 	@description.setter
 	def description(self, s):
-		if not s:
-			raise ValueError("Missing a required field: description")
 		self._description = s
 
 	@property
@@ -86,9 +132,6 @@ class ModuleMetadata():
 
 	@module_licenses.setter
 	def module_licenses(self, sl: list):
-		# TODO: Check whether it's actually a list of strings
-		if not isinstance(sl, list):
-			raise ValueError("module_licenses needs to be a list")
 		self._module_licenses = sl
 
 	@property
@@ -97,11 +140,6 @@ class ModuleMetadata():
 
 	@content_licenses.setter
 	def content_licenses(self, sl):
-		if not sl:
-			raise ValueError("Missing a required field: content licenses")
-		# TODO: Check whether ti's actually a list of strings
-		if not isinstance(sl, list):
-			raise ValueError("content_licenses needs to be a list")
 		self._content_licenses = sl
 
 	@property
@@ -110,8 +148,6 @@ class ModuleMetadata():
 
 	@requires.setter
 	def requires(self, d):
-		if not isinstance(d, dict):
-			raise ValueError("requires needs to be a dictionary")
 		self._requires = d
 
 	@property
