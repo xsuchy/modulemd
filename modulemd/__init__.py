@@ -37,7 +37,7 @@ class ModuleMetadata():
 	@mdversion.setter
 	def mdversion(self, i):
 		if i not in supported_mdversions:
-			raise ValueError("Unsupported metadata version:", version)
+			raise ValueError("Unsupported metadata version:", i)
 		self._mdversion = i
 
 	@property
@@ -45,7 +45,7 @@ class ModuleMetadata():
 		return self._name
 
 	@name.setter
-	def name(self, s)
+	def name(self, s):
 		if not s:
 			raise ValueError("Missing a required field: name")
 		self._name = s
@@ -82,16 +82,14 @@ class ModuleMetadata():
 
 	@property
 	def module_licenses(self):
-		return self._module_license
+		return self._module_licenses
 
-	@module_license.setter
-	def module_licenses(self, sl):
-		if not sl:
-			raise ValueError("Missing a required field: module licenses")
+	@module_licenses.setter
+	def module_licenses(self, sl: list):
 		# TODO: Check whether it's actually a list of strings
 		if not isinstance(sl, list):
 			raise ValueError("module_licenses needs to be a list")
-		self._module_license = sl
+		self._module_licenses = sl
 
 	@property
 	def content_licenses(self):
