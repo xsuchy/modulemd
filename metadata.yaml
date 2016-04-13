@@ -40,25 +40,28 @@ data:
                 tracker: http://www.example.com/
         # Functional components of the module
         components:
-                # Main packages of the module; these are typically autoinstalled
-                # The keys are package names, the values structures with
-                # possible extra information or constraints.
-                packages:
-                        bar: {}
-                        baz: {}
-                        foo: {}
-                        foo-extras:
-                                # foo-extras is only available on the
-                                # listed architectures
-                                arches: [ i686, x86_64 ]
-                                # a list of architectures with multilib
-                                # installs, i.e. both i686 and x86_64
-                                # versions will be installed on x86_64
-                                multilib: [ x86_64 ]
-                        xyz: {}
-                # Should this module include dependencies of its packages
-                # that are not provided by any of the modules it depends on?
-                dependencies: True
-                # Should this module include all the packages generated from the
-                # same source packages as the ones listed above?
-                fulltree: True
+                # RPM content of the module
+                rpms:
+                        # Should this module include dependencies of its RPM packages
+                        # that are not provided by any of the modules it depends on?
+                        dependencies: True
+                        # Should this module include all the packages generated from the
+                        # same source packages as the ones listed above?
+                        fulltree: True
+                        # Main RPM packages of the module; these are typically
+                        # autoinstald The keys are package names, the values structures
+                        # with possible extra information or constraints.  Alternatively,
+                        # they can be null if no extra information is required.
+                        packages:
+                                bar: ~
+                                baz: ~
+                                foo: ~
+                                foo-extras:
+                                        # foo-extras is only available on the
+                                        # listed architectures
+                                        arches: [ i686, x86_64 ]
+                                        # a list of architectures with multilib
+                                        # installs, i.e. both i686 and x86_64
+                                        # versions will be installed on x86_64
+                                        multilib: [ x86_64 ]
+                                xyz: ~
