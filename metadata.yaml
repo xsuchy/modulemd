@@ -29,7 +29,7 @@ data:
         # Run-time dependencies of this module, optional
         # Keys are module names, values are the minimum required versions
         requires:
-                - core: 24-1
+                core: 24-1
         # References to external resources, typically upstream, optional
         references:
                 # Upstream community website, if it exists, optional
