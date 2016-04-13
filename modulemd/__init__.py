@@ -9,12 +9,13 @@ class ModuleMetadata():
 		self.version = None
 		self.summary = None
 		self.description = None
-		self.module_licenses = []
-		self.content_licenses = []
+		self.module_licenses = set()
+		self.content_licenses = set()
 		self.requires = dict()
 		self.community = None
 		self.documentation = None
 		self.tracker = None
+		self.components = None
 
 	def load(self, f):
 		with open(f, "r") as infile:
@@ -31,10 +32,10 @@ class ModuleMetadata():
 		self.name = yml["data"]["name"]
 		self.version = yml["data"]["version"]
 		self.summary = yml["data"]["summary"]
-		self.description = yml["data"]["description"]
-		self.module_licenses = yml["data"]["license"]["module"]
+		self.description = yml["data"]["description"].strip()
+		self.module_licenses = set(yml["data"]["license"]["module"])
 		if "content" in yml["data"]["license"]:
-			self.content_licenses = yml["data"]["license"]["content"]
+			self.content_licenses = set(yml["data"]["license"]["content"])
 		if "requires" in yml["data"]:
 			self.requires = yml["data"]["requires"]
 		if "references" in yml["data"]:
@@ -44,7 +45,25 @@ class ModuleMetadata():
 				self.document = yml["data"]["references"]["documentation"]
 			if "tracker" in yml["data"]["references"]:
 				self.tracker = yml["data"]["references"]["tracker"]
-		# TODO: components
+		if "components" in yml["data"]:
+			self.components = ModuleComponents()
+			if "rpms" in yml["data"]["components"]:
+				self.components.rpms = ModuleRPMs()
+				if "dependencies" in yml["data"]["components"]["rpms"]:
+					self.components.rpms.dependencies = \
+						yml["data"]["components"]["rpms"]["dependencies"]
+				if "fulltree" in yml["data"]["components"]["rpms"]:
+					self.components.rpms.fulltree = \
+						yml["data"]["components"]["rpms"]["fulltree"]
+				if "packages" in yml["data"]["components"]["rpms"]:
+					for p, e in yml["data"]["components"]["rpms"]["packages"].items():
+						extras = dict()
+						if e:
+							if "arches" in e:
+								extras["arches"] = e["arches"]
+							if "multilib" in e:
+								extras["multilib"] = e["multilib"]
+						self.components.rpms.add_package(p, **extras)
 
 	def dump(self, f):
 		data = self.dumps()
@@ -65,9 +84,9 @@ class ModuleMetadata():
 		data["data"]["summary"] = self.summary
 		data["data"]["description"] = self.description
 		data["data"]["license"] = dict()
-		data["data"]["license"]["module"] = self.module_licenses
+		data["data"]["license"]["module"] = list(self.module_licenses)
 		if self.content_licenses:
-			data["data"]["license"]["content"] = self.content_licenses
+			data["data"]["license"]["content"] = list(self.content_licenses)
 		if self.requires:
 			data["data"]["requires"] = self.requires
 		if self.community or self.documentation or self.tracker:
@@ -84,7 +103,6 @@ class ModuleMetadata():
 	def validate(self):
 		# TODO: do some actual validation
 		return True
-
 
 	@property
 	def mdversion(self):
@@ -131,16 +149,38 @@ class ModuleMetadata():
 		return self._module_licenses
 
 	@module_licenses.setter
-	def module_licenses(self, sl: list):
-		self._module_licenses = sl
+	def module_licenses(self, ss):
+		if not isinstance(ss, set):
+			raise TypeError("module_licenses requires a set")
+		self._module_licenses = ss
+
+	def add_module_license(self, s):
+		self._module_licenses.add(s)
+
+	def del_module_license(self, s):
+		self._module_licenses.discard(s)
+
+	def clear_module_licenses(self):
+		self._module_licenses.clear()
 
 	@property
 	def content_licenses(self):
 		return self._content_licenses
 
 	@content_licenses.setter
-	def content_licenses(self, sl):
-		self._content_licenses = sl
+	def content_licenses(self, ss):
+		if not isinstance(ss, set):
+			raise TypeError("content_licenses requires a set")
+		self._content_licenses = ss
+
+	def add_content_license(self, s):
+		self._content_licenses.add(s)
+
+	def del_content_license(self, s):
+		self._content_licenses.discard(s)
+
+	def clear_content_licenses(self):
+		self._content_licenses.clear()
 
 	@property
 	def requires(self):
@@ -175,3 +215,85 @@ class ModuleMetadata():
 		self._documentation = s
 
 	# TODO: components not implemented yet
+
+	@property
+	def components(self):
+		return self._components
+
+	@components.setter
+	def components(self, o):
+		self._components = o
+
+class ModuleComponents():
+	def __init__(self):
+		self._rpms = None
+
+	@property
+	def rpms(self):
+		return self._rpms
+
+	@rpms.setter
+	def rpms(self, o):
+		if not isinstance(o, ModuleRPMs):
+			raise TypeError("rpms needs to be an instance of ModuleRPMs")
+		self._rpms = o
+
+class ModuleContent():
+	def __init__(self):
+		self.packages = dict()
+
+	@property
+	def packages(self):
+		return self._packages
+
+	@packages.setter
+	def packages(self, d):
+		self._packages = d
+
+	def add_package(self, p):
+		pkgs = self._packages
+		pkgs[p] = None
+		self.packages = pkgs
+
+	update_package = add_package
+
+	def del_package(self, p):
+		if p in self._packages:
+			del self._packages[p]
+
+	def clear_packages(self):
+		self._packages = dict()
+
+
+class ModuleRPMs(ModuleContent):
+	def __init__(self):
+		self._dependencies = True
+		self._fulltree = True
+		self._packages = dict()
+
+	def add_package(self, p, arches=None, multilib=None):
+		pkgs = self._packages
+		pkgs[p] = None
+		if arches or multilib:
+			pkgs[p] = dict()
+			if arches:
+				pkgs[p]["arches"] = arches
+			if multilib:
+				pkgs[p]["multilib"] = multilib
+		self.packages = pkgs
+
+	@property
+	def dependencies(self):
+		return self._dependencies
+
+	@dependencies.setter
+	def dependencies(self, b):
+		self._dependencies = b
+
+	@property
+	def fulltree(self):
+		return self._fulltree
+
+	@fulltree.setter
+	def fulltree(self, b):
+		self._fulltree = b
