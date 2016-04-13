@@ -1,5 +1,9 @@
 import yaml
 
+from modulemd.components import ModuleComponents
+from modulemd.content import ModuleContent
+from modulemd.rpms import ModuleRPMs
+
 supported_mdversions = ( 0, )
 
 class ModuleMetadata():
@@ -223,77 +227,3 @@ class ModuleMetadata():
 	@components.setter
 	def components(self, o):
 		self._components = o
-
-class ModuleComponents():
-	def __init__(self):
-		self._rpms = None
-
-	@property
-	def rpms(self):
-		return self._rpms
-
-	@rpms.setter
-	def rpms(self, o):
-		if not isinstance(o, ModuleRPMs):
-			raise TypeError("rpms needs to be an instance of ModuleRPMs")
-		self._rpms = o
-
-class ModuleContent():
-	def __init__(self):
-		self.packages = dict()
-
-	@property
-	def packages(self):
-		return self._packages
-
-	@packages.setter
-	def packages(self, d):
-		self._packages = d
-
-	def add_package(self, p):
-		pkgs = self._packages
-		pkgs[p] = None
-		self.packages = pkgs
-
-	update_package = add_package
-
-	def del_package(self, p):
-		if p in self._packages:
-			del self._packages[p]
-
-	def clear_packages(self):
-		self._packages = dict()
-
-
-class ModuleRPMs(ModuleContent):
-	def __init__(self):
-		self._dependencies = True
-		self._fulltree = True
-		self._packages = dict()
-
-	def add_package(self, p, arches=None, multilib=None):
-		pkgs = self._packages
-		pkgs[p] = None
-		if arches or multilib:
-			pkgs[p] = dict()
-			if arches:
-				pkgs[p]["arches"] = arches
-			if multilib:
-				pkgs[p]["multilib"] = multilib
-		self.packages = pkgs
-
-	@property
-	def dependencies(self):
-		return self._dependencies
-
-	@dependencies.setter
-	def dependencies(self, b):
-		self._dependencies = b
-
-	@property
-	def fulltree(self):
-		return self._fulltree
-
-	@fulltree.setter
-	def fulltree(self, b):
-		self._fulltree = b
