@@ -17,6 +17,8 @@ class ModuleRPMs(ModuleContent):
                                 pkgs[p]["multilib"] = multilib
                 self.packages = pkgs
 
+        update_package = add_package
+
         @property
         def dependencies(self):
                 return self._dependencies

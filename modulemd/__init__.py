@@ -46,7 +46,7 @@ class ModuleMetadata():
 			if "community" in yml["data"]["references"]:
 				self.community = yml["data"]["references"]["community"]
 			if "documentation" in yml["data"]["references"]:
-				self.document = yml["data"]["references"]["documentation"]
+				self.documentation = yml["data"]["references"]["documentation"]
 			if "tracker" in yml["data"]["references"]:
 				self.tracker = yml["data"]["references"]["tracker"]
 		if "components" in yml["data"]:
@@ -101,7 +101,25 @@ class ModuleMetadata():
 				data["data"]["references"]["documentation"] = self.documentation
 			if self.tracker:
 				data["data"]["references"]["tracker"] = self.tracker
-		# TODO: components
+		if self.components:
+			data["data"]["components"] = dict()
+			if self.components.rpms:
+				data["data"]["components"]["rpms"] = dict()
+				data["data"]["components"]["rpms"]["dependencies"] = \
+					self.components.rpms.dependencies
+				data["data"]["components"]["rpms"]["fulltree"] = \
+					self.components.rpms.fulltree
+				if self.components.rpms.packages:
+					data["data"]["components"]["rpms"]["packages"] = dict()
+					for p, e in self.components.rpms.packages.items():
+						extra = dict()
+						if isinstance(e, dict):
+							if "arches" in e:
+								extra["arches"] = e["arches"]
+							if "multilib" in e:
+								extra["multilib"] = e["multilib"]
+						data["data"]["components"]["rpms"]["packages"][p] = \
+							extra
 		return yaml.dump(data)
 
 	def validate(self):
@@ -114,7 +132,9 @@ class ModuleMetadata():
 
 	@mdversion.setter
 	def mdversion(self, i):
-		self._mdversion = i
+		if i not in supported_mdversions:
+			raise ValueError("Unsupported metadata version")
+		self._mdversion = int(i)
 
 	@property
 	def name(self):
@@ -122,7 +142,7 @@ class ModuleMetadata():
 
 	@name.setter
 	def name(self, s):
-		self._name = s
+		self._name = str(s)
 
 	@property
 	def version(self):
@@ -130,7 +150,7 @@ class ModuleMetadata():
 
 	@version.setter
 	def version(self, s):
-		self._version = s
+		self._version = str(s)
 
 	@property
 	def summary(self):
@@ -138,7 +158,7 @@ class ModuleMetadata():
 
 	@summary.setter
 	def summary(self, s):
-		self._summary = s
+		self._summary = str(s)
 
 	@property
 	def description(self):
@@ -146,7 +166,7 @@ class ModuleMetadata():
 
 	@description.setter
 	def description(self, s):
-		self._description = s
+		self._description = str(s)
 
 	@property
 	def module_licenses(self):
@@ -159,10 +179,10 @@ class ModuleMetadata():
 		self._module_licenses = ss
 
 	def add_module_license(self, s):
-		self._module_licenses.add(s)
+		self._module_licenses.add(str(s))
 
 	def del_module_license(self, s):
-		self._module_licenses.discard(s)
+		self._module_licenses.discard(str(s))
 
 	def clear_module_licenses(self):
 		self._module_licenses.clear()
@@ -178,10 +198,10 @@ class ModuleMetadata():
 		self._content_licenses = ss
 
 	def add_content_license(self, s):
-		self._content_licenses.add(s)
+		self._content_licenses.add(str(s))
 
 	def del_content_license(self, s):
-		self._content_licenses.discard(s)
+		self._content_licenses.discard(str(s))
 
 	def clear_content_licenses(self):
 		self._content_licenses.clear()
@@ -192,7 +212,21 @@ class ModuleMetadata():
 
 	@requires.setter
 	def requires(self, d):
+		if d and not isinstance(d, dict):
+			raise TypeError("Incorrect data type passed for requires")
 		self._requires = d
+
+	def add_requires(self, n, v):
+		self._requires[str(n)] = str(v)
+
+	update_requires = add_requires
+
+	def del_requires(self, n):
+		if str(n) in self._requires:
+			del self._requires[str(n)]
+
+	def clear_requires(self):
+		self._requires = dict()
 
 	@property
 	def community(self):
@@ -200,7 +234,7 @@ class ModuleMetadata():
 
 	@community.setter
 	def community(self, s):
-		self._community = s
+		self._community = str(s)
 
 	@property
 	def documentation(self):
@@ -208,17 +242,15 @@ class ModuleMetadata():
 
 	@documentation.setter
 	def documentation(self, s):
-		self._documentation = s
+		self._documentation = str(s)
 
 	@property
 	def tracker(self):
-		return self._documentation
+		return self._tracker
 
 	@tracker.setter
 	def tracker(self, s):
-		self._documentation = s
-
-	# TODO: components not implemented yet
+		self._tracker = str(s)
 
 	@property
 	def components(self):
@@ -226,4 +258,6 @@ class ModuleMetadata():
 
 	@components.setter
 	def components(self, o):
+		if o and not isinstance(o, ModuleComponents):
+			raise TypeError("Incorrect data type passed for components")
 		self._components = o
