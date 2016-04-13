@@ -36,7 +36,7 @@ class ModuleMetadata():
 		self.name = yml["data"]["name"]
 		self.version = yml["data"]["version"]
 		self.summary = yml["data"]["summary"]
-		self.description = yml["data"]["description"].strip()
+		self.description = str(yml["data"]["description"]).strip()
 		self.module_licenses = set(yml["data"]["license"]["module"])
 		if "content" in yml["data"]["license"]:
 			self.content_licenses = set(yml["data"]["license"]["content"])

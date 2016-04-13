@@ -8,6 +8,8 @@ class ModuleContent():
 
         @packages.setter
         def packages(self, d):
+                if not isinstance(d, dict):
+                        raise TypeError("packages requires a dict")
                 self._packages = d
 
         def add_package(self, p):
