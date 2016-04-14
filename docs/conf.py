@@ -25,7 +25,7 @@ def run_apidoc(_):
     cmd = 'sphinx-apidoc'
     if hasattr(sys, 'real_prefix'):
         cmd = os.path.abspath(os.path.join(sys.prefix, 'bin', cmd))
-    subprocess.check_call([cmd, '../fm', '--full', '-o', cwd])
+    subprocess.check_call([cmd, '../modulemd', '--full', '-o', cwd])
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -273,3 +273,6 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
