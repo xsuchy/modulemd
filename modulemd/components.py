@@ -35,7 +35,8 @@ class ModuleComponents():
 
     @property
     def rpms(self):
-        """A ModuleRPMs instance representing the RPM-type components."""
+        """A ModuleRPMs instance property representing the RPM-type
+        components of the module."""
         return self._rpms
 
     @rpms.setter

@@ -33,7 +33,7 @@ class ModuleContent():
 
     @property
     def packages(self):
-        """A dictionary representing the package list.
+        """A dictionary property representing the package list.
 
         Keys (strings) are package names, values (dictionaries or None) are
         implementation specific extra data.

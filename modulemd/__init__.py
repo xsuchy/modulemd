@@ -135,7 +135,7 @@ class ModuleMetadata():
     def dumps(self):
         """Dumps te metadata into a string.
 
-        :rtype str
+        :rtype: str
         :raises Exception: If metadata validation fails
         """
         if not self.validate:
@@ -188,14 +188,14 @@ class ModuleMetadata():
     def validate(self):
         """Performs an in-depth validation of the metadata instance.
 
-        :rtype bool
+        :rtype: bool
         """
         # TODO: do some actual validation
         return True
 
     @property
     def mdversion(self):
-        """An int representing the metadata format version used.
+        """An int property representing the metadata format version used.
 
         This is automatically set to the highest supported version for
         new objects or set by the loaded document.  This value can be
@@ -212,7 +212,7 @@ class ModuleMetadata():
 
     @property
     def name(self):
-        """A string representing the name of the module."""
+        """A string property representing the name of the module."""
         return self._name
 
     @name.setter
@@ -221,7 +221,7 @@ class ModuleMetadata():
 
     @property
     def version(self):
-        """A string representing the version of the module."""
+        """A string property representing the version of the module."""
         return self._version
 
     @version.setter
@@ -230,7 +230,7 @@ class ModuleMetadata():
 
     @property
     def summary(self):
-        """A string representing a short summary of the module."""
+        """A string property representing a short summary of the module."""
         return self._summary
 
     @summary.setter
@@ -239,7 +239,8 @@ class ModuleMetadata():
 
     @property
     def description(self):
-        """A string representing a detailed description of the module."""
+        """A string property representing a detailed description of the
+        module."""
         return self._description
 
     @description.setter
@@ -248,7 +249,8 @@ class ModuleMetadata():
 
     @property
     def module_licenses(self):
-        """A set of strings representing the license terms of the module itself."""
+        """A set of strings, a property, representing the license terms
+        of the module itself."""
         return self._module_licenses
 
     @module_licenses.setter
@@ -277,7 +279,8 @@ class ModuleMetadata():
 
     @property
     def content_licenses(self):
-        """A set of strings representing the license terms of the module contents."""
+        """A set of strings, a property, representing the license terms
+        of the module contents."""
         return self._content_licenses
 
     @content_licenses.setter
@@ -306,10 +309,11 @@ class ModuleMetadata():
 
     @property
     def requires(self):
-        """A dictionary representing the required dependencies of the module.
+        """A dictionary property representing the required dependencies of
+        the module.
 
-        Keys are the required module names (strings), values are their mininum
-        required versions (also strings).
+        Keys are the required module names (strings), values are their
+        mininum required versions (also strings).
         """
         return self._requires
 
@@ -343,7 +347,8 @@ class ModuleMetadata():
 
     @property
     def community(self):
-        """A string representing a link to the upstream community for this module."""
+        """A string property representing a link to the upstream community
+        for this module."""
         return self._community
 
     @community.setter
@@ -352,7 +357,8 @@ class ModuleMetadata():
 
     @property
     def documentation(self):
-        """A string representing a link to the upstream documentation for this module."""
+        """A string property representing a link to the upstream
+        documentation for this module."""
         return self._documentation
 
     @documentation.setter
@@ -361,7 +367,8 @@ class ModuleMetadata():
 
     @property
     def tracker(self):
-        """A string representing a link to the upstream bug tracker for this module."""
+        """A string property representing a link to the upstream bug tracker
+        for this module."""
         return self._tracker
 
     @tracker.setter
@@ -370,7 +377,8 @@ class ModuleMetadata():
 
     @property
     def components(self):
-        """A ModuleComponents instance representing the components defining the module."""
+        """A ModuleComponents instance property representing the components
+        defining the module."""
         return self._components
 
     @components.setter

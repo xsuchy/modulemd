@@ -27,7 +27,7 @@
 from modulemd.content import ModuleContent
 
 class ModuleRPMs(ModuleContent):
-    """Class for RPM-type module content."""
+    """A ModuleContent subclass for RPM-type module content."""
 
     def __init__(self):
         """Creates a new ModuleRPMs instance."""
@@ -62,8 +62,8 @@ class ModuleRPMs(ModuleContent):
 
     @property
     def dependencies(self):
-        """A boolean indicating whether the packages' dependencies should
-        be included within the module or not.
+        """A boolean property indicating whether the packages' dependencies
+        should be included within the module or not.
         """
         return self._dependencies
 
@@ -73,8 +73,8 @@ class ModuleRPMs(ModuleContent):
 
     @property
     def fulltree(self):
-        """A boolean indicating whether the whole package tree, for example
-        non-listed subpackages, source packages et al. should be also
+        """A boolean property indicating whether the whole package tree, for
+        example non-listed subpackages, source packages et al. should be also
         included within the module or not.
         """
         return self._fulltree
