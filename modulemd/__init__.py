@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 # Copyright (c) 2016  Red Hat, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,7 +23,22 @@
 #
 # Written by Petr Šabata <contyk@redhat.com>
 
-"""Module metadata manipulation library."""
+"""Module metadata manipulation library.
+
+A python3 library for manipulation of the proposed module metadata format.
+
+Example usage:
+
+.. code:: python
+
+    import modulemd
+    mmd = modulemd.ModuleMetadata()
+    mmd.load("metadata.yaml")
+    mmd.add_module_license("ISC")
+    mmd.components.rpms.clear_packages()
+    mmd.components.rpms.add_package("example", multilib=["x86_64"])
+    mmd.dump("out.yaml")
+"""
 
 import yaml
 
