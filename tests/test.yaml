@@ -1,0 +1,29 @@
+document: modulemd
+version: 0
+data:
+        name: test
+        version: 1.23-1
+        summary: A test module
+        description: >
+                This module is a part of the modulemd test suite.
+        license:
+                module:
+                        - MIT
+                content:
+                        - GPL+
+                        - GPLv3
+        requires:
+                modulemd: 42-42
+        references:
+                community: http://www.example.com/community
+                documentation: http://www.example.com/documentation
+                tracker: http://www.example.com/tracker
+        components:
+                rpms:
+                        dependencies: False
+                        fulltree: False
+                        packages:
+                                alfa: ~
+                                bravo:
+                                        arches: [ charlie, delta ]
+                                        multilib: [ echo ]
