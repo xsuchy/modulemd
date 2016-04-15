@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 
 import modulemd
 
-class TestContent(unittest.TestCase):
+class TestRPMs(unittest.TestCase):
     def setUp(self):
         self.mr = modulemd.ModuleRPMs()
 
