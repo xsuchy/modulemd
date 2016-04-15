@@ -79,7 +79,7 @@ class ModuleMetadata():
         """Loads metadata from a string.
 
         :param str s: Raw metadata in YAML
-        :rases ValueError: If the metadata is invalid or unsupported.
+        :raises ValueError: If the metadata is invalid or unsupported.
         """
         yml = yaml.safe_load(s)
         if yml["document"] != "modulemd":
