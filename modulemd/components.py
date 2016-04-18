@@ -26,7 +26,7 @@
 
 from modulemd.rpms import ModuleRPMs
 
-class ModuleComponents():
+class ModuleComponents(object):
     """Class representing components of a module."""
 
     def __init__(self):

@@ -48,7 +48,7 @@ from modulemd.rpms import ModuleRPMs
 
 supported_mdversions = ( 0, )
 
-class ModuleMetadata():
+class ModuleMetadata(object):
     """Class representing the whole module."""
 
     def __init__(self):

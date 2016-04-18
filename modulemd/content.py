@@ -24,7 +24,7 @@
 # Written by Petr Šabata <contyk@redhat.com>
 
 
-class ModuleContent():
+class ModuleContent(object):
     """Base class for module content."""
 
     def __init__(self):
