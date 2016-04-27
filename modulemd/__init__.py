@@ -189,8 +189,73 @@ class ModuleMetadata(object):
         """Performs an in-depth validation of the metadata instance.
 
         :rtype: bool
+        :raises TypeError: If properties are holding data of incorrect type
+        :raises ValueError: If properties are holding invalid data
         """
-        # TODO: do some actual validation
+        if not isinstance(self.mdversion, int):
+            raise TypeError("mdversion must be an integer")
+        if not isinstance(self.name, str):
+            raise TypeError("name must be a string")
+        if not isinstance(self.version, str):
+            raise TypeError("version must be a string")
+        if not isinstance(self.summary, str):
+            raise TypeError("summary must be a string")
+        if not isinstance(self.description, str):
+            raise TypeError("description must be a string")
+        if not isinstance(self.module_licenses, set):
+            raise TypeError("module_licenses must be a set")
+        for l in self.module_licenses:
+            if not isinstance(l, str):
+                raise TypeError("module_licenses must be a set of strings")
+        if not isinstance(self.content_licenses, set):
+            raise TypeError("content_licenses must be a set")
+        for l in self.content_licenses:
+            if not isinstance(l, str):
+                raise TypeError("content_licenses must be a set of strings")
+        if not isinstance(self.requires, dict):
+            raise TypeError("requires must be a dictionary")
+        for r, v in self.requires.items():
+            if not isinstance(r, str) or not isinstance(v, str):
+                raise TypeError("requires keys and values must be strings")
+        if not isinstance(self.community, str):
+            raise TypeError("community must be a string")
+        if not isinstance(self.documentation, str):
+            raise TypeError("documentation must be a string")
+        if not isinstance(self.tracker, str):
+            raise TypeError("tracker must be a string")
+        if not isinstance(self.components, ModuleComponents):
+            raise TypeError("components must be an instance of ModuleComponents")
+        if self.components.rpms:
+            if not isinstance(self.components.rpms, ModuleRPMs):
+                raise TypeError("rpms must be an instance of ModuleRPMs")
+            if not isinstance(self.components.rpms.dependencies, bool):
+                raise TypeError("rpms.dependencies must be a boolean")
+            if not isinstance(self.components.rpms.fulltree, bool):
+                raise TypeError("rpms.fulltree must be a boolean")
+            if self.components.rpms.packages:
+                if not isinstance(self.components.rpms.packages, dict):
+                    raise TypeError("rpms.packages must be a dictionary")
+                for p, e in self.components.rpms.packages.items():
+                    if not isinstance(p, str):
+                        raise TypeError("rpms.packages keys must be strings")
+                    if e:
+                        if not isinstance(e, dict):
+                            raise TypeError("rpms.packages values must dictionaries")
+                        for k, v in e.items():
+                            if not isinstance(k, str):
+                                raise TypeError("rpms extras keys must be strings")
+                            if k == "arches" and v:
+                                if not isinstance(v, list):
+                                    raise TypeError("rpms arches must be a list")
+                                for s in v:
+                                    if not isinstance(s, str):
+                                        raise TypeError("arches must be a list of strings")
+                            if k == "multilib" and v:
+                                if not isinstance(v, list):
+                                    raise TypeError("rpms multilib must be a list")
+                                for s in v:
+                                    if not isinstance(s, str):
+                                        raise TypeError("multilib must be a list of strings")
         return True
 
     @property
