@@ -35,8 +35,9 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 import modulemd
 
 class TestContent(unittest.TestCase):
-    def setUp(self):
-        self.mc = modulemd.ModuleContent()
+    @classmethod
+    def setUpClass(cls):
+        cls.mc = modulemd.ModuleContent()
 
     def test_add_package(self):
         self.mc.packages = dict()

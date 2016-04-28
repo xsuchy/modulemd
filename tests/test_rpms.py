@@ -35,8 +35,9 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 import modulemd
 
 class TestRPMs(unittest.TestCase):
-    def setUp(self):
-        self.mr = modulemd.ModuleRPMs()
+    @classmethod
+    def setUpClass(cls):
+        cls.mr = modulemd.ModuleRPMs()
 
     def test_add_package(self):
         self.mr.packages = dict()

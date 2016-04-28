@@ -35,8 +35,9 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 import modulemd
 
 class TestRequires(unittest.TestCase):
-    def setUp(self):
-        self.mmd = modulemd.ModuleMetadata()
+    @classmethod
+    def setUpClass(cls):
+        cls.mmd = modulemd.ModuleMetadata()
 
     def test_add_requires(self):
         self.mmd.requires = dict()

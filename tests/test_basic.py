@@ -35,23 +35,24 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 import modulemd
 
 class TestBasic(unittest.TestCase):
-    def setUp(self):
-        self.mmd = modulemd.ModuleMetadata()
-        self.mmd.name = "test"
-        self.mmd.version = "42-1"
-        self.mmd.summary = "A test module"
-        self.mmd.description = "It's only used for testing purposes."
-        self.mmd.module_licenses = set([ "MIT" ])
-        self.mmd.content_licenses = set([ "ISC" ])
-        self.mmd.requires = { "dependency" : "1.00-1" }
-        self.mmd.community = "http://www.example.com/community"
-        self.mmd.documentation = "http://www.example.com/documentation"
-        self.mmd.tracker = "http://www.example.com/tracker"
-        self.mmd.components = modulemd.ModuleComponents()
-        self.mmd.components.rpms = modulemd.ModuleRPMs()
-        self.mmd.components.rpms.dependencies = False
-        self.mmd.components.rpms.fulltree = False
-        self.mmd.components.rpms.packages = { "rpm" : None }
+    @classmethod
+    def setUpClass(cls):
+        cls.mmd = modulemd.ModuleMetadata()
+        cls.mmd.name = "test"
+        cls.mmd.version = "42-1"
+        cls.mmd.summary = "A test module"
+        cls.mmd.description = "It's only used for testing purposes."
+        cls.mmd.module_licenses = set([ "MIT" ])
+        cls.mmd.content_licenses = set([ "ISC" ])
+        cls.mmd.requires = { "dependency" : "1.00-1" }
+        cls.mmd.community = "http://www.example.com/community"
+        cls.mmd.documentation = "http://www.example.com/documentation"
+        cls.mmd.tracker = "http://www.example.com/tracker"
+        cls.mmd.components = modulemd.ModuleComponents()
+        cls.mmd.components.rpms = modulemd.ModuleRPMs()
+        cls.mmd.components.rpms.dependencies = False
+        cls.mmd.components.rpms.fulltree = False
+        cls.mmd.components.rpms.packages = { "rpm" : None }
 
     def test_mdversion(self):
         self.assertIn(self.mmd.mdversion, modulemd.supported_mdversions)
