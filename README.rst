@@ -12,4 +12,4 @@ metadata.yaml:
         See comments in the template for details.
 
 modulemd:
-        A python3 library for manipulation of the proposed module metadata format.
+        A python library for manipulation of the proposed module metadata format.

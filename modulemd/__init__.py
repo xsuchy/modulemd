@@ -25,7 +25,7 @@
 
 """Module metadata manipulation library.
 
-A python3 library for manipulation of the proposed module metadata format.
+A python library for manipulation of the proposed module metadata format.
 
 Example usage:
 
