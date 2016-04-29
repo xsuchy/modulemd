@@ -256,6 +256,16 @@ class ModuleMetadata(object):
                                 for s in v:
                                     if not isinstance(s, str):
                                         raise TypeError("multilib must be a list of strings")
+        if not self.name:
+            raise ValueError("name is required")
+        if not self.version:
+            raise ValueError("version is required")
+        if not self.summary:
+            raise ValueError("summary is required")
+        if not self.description:
+            raise ValueError("description is required")
+        if not self.module_licenses:
+            raise ValueError("at least one module license is required")
         return True
 
     @property

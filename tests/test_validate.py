@@ -43,21 +43,37 @@ class TestValidate(unittest.TestCase):
         self.mmd._mdversion = None
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_name(self):
+    def test_validate_name1(self):
         self.mmd._name = None
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_version(self):
+    def test_validate_name2(self):
+        self.mmd.name = ""
+        self.assertRaises(ValueError, self.mmd.validate)
+
+    def test_validate_version1(self):
         self.mmd._version = None
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_summary(self):
+    def test_validate_version2(self):
+        self.mmd.version = ""
+        self.assertRaises(ValueError, self.mmd.validate)
+
+    def test_validate_summary1(self):
         self.mmd._summary = None
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_description(self):
+    def test_validate_summary2(self):
+        self.mmd.summary = ""
+        self.assertRaises(ValueError, self.mmd.validate)
+
+    def test_validate_description1(self):
         self.mmd._description = None
         self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_description2(self):
+        self.mmd.description = ""
+        self.assertRaises(ValueError, self.mmd.validate)
 
     def test_validate_module_licenses1(self):
         self.mmd._module_licenses = None
@@ -66,6 +82,10 @@ class TestValidate(unittest.TestCase):
     def test_validate_module_licenses2(self):
         self.mmd._module_licenses = set([1, 2, 3])
         self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_module_licenses3(self):
+        self.mmd.clear_module_licenses()
+        self.assertRaises(ValueError, self.mmd.validate)
 
     def test_validate_content_licenses1(self):
         self.mmd._content_licenses = None
