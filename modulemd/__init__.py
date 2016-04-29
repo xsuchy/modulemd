@@ -54,16 +54,16 @@ class ModuleMetadata(object):
     def __init__(self):
         """Creates a new ModuleMetadata instance."""
         self.mdversion = max(supported_mdversions)
-        self.name = None
-        self.version = None
-        self.summary = None
-        self.description = None
+        self.name = ""
+        self.version = ""
+        self.summary = ""
+        self.description = ""
         self.module_licenses = set()
         self.content_licenses = set()
         self.requires = dict()
-        self.community = None
-        self.documentation = None
-        self.tracker = None
+        self.community = ""
+        self.documentation = ""
+        self.tracker = ""
         self.components = None
 
     def load(self, f):
