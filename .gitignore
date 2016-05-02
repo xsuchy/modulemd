@@ -1,0 +1,4 @@
+*.pyc
+*.pyo
+modulemd.egg-info
+tests/dump.yaml
