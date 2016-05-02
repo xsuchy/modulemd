@@ -19,7 +19,7 @@ BuildRequires:  python3-PyYAML
 %package -n python2-%{name}
 Summary:        %{summary}
 Requires:       PyYAML
-%{?python_provide:%python_provide python2-%{name}}
+%{?python_provide python2-%{name}}
 
 %description -n python2-%{name}
 %{_pkgdescription}
@@ -27,7 +27,7 @@ Requires:       PyYAML
 %package -n python3-%{name}
 Summary:        %{summary}
 Requires:       python3-PyYAML
-%{?python_provide:%python_provide python3-%{name}}
+%{?python_provide python3-%{name}}
 
 %description -n python3-%{name}
 %{_pkgdescription}
