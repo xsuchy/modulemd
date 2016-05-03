@@ -13,3 +13,4 @@ metadata.yaml:
 
 modulemd:
         A python library for manipulation of the proposed module metadata format.
+        API documentation is available at http://modulemd.readthedocs.org/.
