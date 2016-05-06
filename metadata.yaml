@@ -4,9 +4,18 @@ document: modulemd
 version: 0
 data:
         # Module name, required
+        # NOTE: Module names might be structured differently later to include the
+        # module's vendor ecosystem, e.g. org.fedoraproject.foo in this case.
+        # This would also affect the dependency sections defined furhter below.
         name: foo
-        # Module version-release, required
-        version: 1.23-1
+        # NOTE: Module versioning is currently being investigated
+        # http://taiga.fedorainfracloud.org/project/modularity/us/175
+        # Module version, required
+        # Typically the same as the version of the main component, where applicable
+        version: 1.23
+        # Module release, required
+        # Version of the module itself
+        release: 4
         # A short summary describing the module, required
         summary: An example module
         # A verbose description of the module, required
@@ -22,14 +31,32 @@ data:
                         - MIT
                 # Content license, optional
                 # A list of licenses used by the packages in the module.
+                # This should be populated by build tools.
                 content:
                         - Beerware
                         - GPLv2+
                         - zlib
-        # Run-time dependencies of this module, optional
-        # Keys are module names, values are the minimum required versions
-        requires:
-                core: 24-1
+        # Extensible metadata block
+        # http://taiga.fedorainfracloud.org/project/modularity/us/135
+        # A dictionary of user-defined keys and values.  May be null.
+        # Optional.  Defaults to null.
+        xmd: ~
+        # Module dependencies, if any.  Optional.
+        # NOTE: Module dependencies are currently being investigated
+        # http://taiga.fedorainfracloud.org/project/modularity/us/170
+        # TODO: Provides, conflicts, obsoletes, recommends, etc.
+        # TODO: Support for comparison operators
+        dependencies:
+                # Build dependencies of this module, optional
+                # Keys are module names, values are the minimum required versions
+                # These modules define the buildroot for this module
+                buildrequires:
+                        core: 23
+                        c-build: 6.0
+                # Run-time dependencies of this module, optional
+                # Keys are module names, values are the minimum required versions
+                requires:
+                        core: 23
         # References to external resources, typically upstream, optional
         references:
                 # Upstream community website, if it exists, optional
@@ -41,32 +68,52 @@ data:
         # Functional components of the module, optional
         components:
                 # RPM content of the module, optional
+                # NOTE: This is currently being investigated
+                # TODO: Package priority build order support (chainbuild)
+                # TODO: Binary package filtering (inclusive or exclusive) support
+                # TODO: Component tags:
+                # http://taiga.fedorainfracloud.org/project/modularity/us/186
+                # http://taiga.fedorainfracloud.org/project/modularity/us/187
+                # http://taiga.fedorainfracloud.org/project/modularity/us/188
+                # TODO: Define architectures to build for
                 rpms:
                         # Should this module include dependencies of its RPM packages
                         # that are not provided by any of the modules it depends on?
                         # Optional, defaults to True
                         dependencies: True
-                        # Should this module include all the packages generated from the
-                        # same source packages as the ones listed above?
+                        # Should this module include all subpackages generated from the
+                        # source packages?  True if yes, False if only the main packages
+                        # should be included.
                         # Optional, defaults to True
                         fulltree: True
-                        # Main RPM packages of the module; these are typically
-                        # autoinstald The keys are package names, the values structures
-                        # with possible extra information or constraints.  Alternatively,
-                        # they can be null if no extra information is required.
+                        # RPM-based packages of this module.
+                        # Keys are the VCS/SRPM names, values dictionaries holding
+                        # additional information where required, or null.
                         # Optional
                         packages:
-                                bar: ~
+                                bar:
+                                        # Use this repository if it's different from
+                                        # the build system configuration.
+                                        # Optional.
+                                        repository: https://pagure.io/bar.git
+                                        # Use this lookaside cache if it's different
+                                        # from the build system configuration.
+                                        # Optional.
+                                        cache: https://example.com/cache
+                                        # Use this specific commit ID for the build.
+                                        # If no commit ID is given, the latest master
+                                        # commit will be used.
+                                        # Optional.
+                                        commit: 26ca0c0
+                                # baz has no extra options
                                 baz: ~
-                                foo: ~
-                                foo-extras:
-                                        # foo-extras is only available on the
-                                        # listed architectures
-                                        # Optional, defaults to all available arches
+                                xxx:
+                                        # xxx is only available on the listed architectures.
+                                        # Optional, defaults to all available arches.
                                         arches: [ i686, x86_64 ]
                                         # a list of architectures with multilib
                                         # installs, i.e. both i686 and x86_64
-                                        # versions will be installed on x86_64
-                                        # Optional, defaults to no multilib
+                                        # versions will be installed on x86_64.
+                                        # Optional, defaults to no multilib.
                                         multilib: [ x86_64 ]
                                 xyz: ~

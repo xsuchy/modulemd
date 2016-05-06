@@ -39,15 +39,18 @@ class TestBasic(unittest.TestCase):
     def setUpClass(cls):
         cls.mmd = modulemd.ModuleMetadata()
         cls.mmd.name = "test"
-        cls.mmd.version = "42-1"
+        cls.mmd.version = "42"
+        cls.mmd.release = "1"
         cls.mmd.summary = "A test module"
         cls.mmd.description = "It's only used for testing purposes."
         cls.mmd.module_licenses = set([ "MIT" ])
         cls.mmd.content_licenses = set([ "ISC" ])
+        cls.mmd.buildrequires = { "builddepenency" : "123-456" }
         cls.mmd.requires = { "dependency" : "1.00-1" }
         cls.mmd.community = "http://www.example.com/community"
         cls.mmd.documentation = "http://www.example.com/documentation"
         cls.mmd.tracker = "http://www.example.com/tracker"
+        cls.mmd.xmd = { "key" : "value" }
         cls.mmd.components = modulemd.ModuleComponents()
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
         cls.mmd.components.rpms.dependencies = False
@@ -61,7 +64,10 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(self.mmd.name, "test")
 
     def test_version(self):
-        self.assertEqual(self.mmd.version, "42-1")
+        self.assertEqual(self.mmd.version, "42")
+
+    def test_release(self):
+        self.assertEqual(self.mmd.release, "1")
 
     def test_summary(self):
         self.assertEqual(self.mmd.summary, "A test module")
@@ -75,6 +81,9 @@ class TestBasic(unittest.TestCase):
     def test_content_licenses(self):
         self.assertEqual(self.mmd.content_licenses, set(["ISC"]))
 
+    def test_buildrequires(self):
+        self.assertEqual(self.mmd.buildrequires, {"builddepenency" : "123-456"})
+
     def test_requires(self):
         self.assertEqual(self.mmd.requires, {"dependency" : "1.00-1"})
 
@@ -86,6 +95,9 @@ class TestBasic(unittest.TestCase):
 
     def test_tracker(self):
         self.assertEqual(self.mmd.tracker, "http://www.example.com/tracker")
+
+    def test_xmd(self):
+        self.assertEqual(self.mmd.xmd, { "key" : "value" })
 
     def test_components(self):
         self.assertIsInstance(self.mmd.components, modulemd.ModuleComponents)

@@ -34,30 +34,51 @@ sys.path.insert(0, os.path.join(DIR, ".."))
 
 import modulemd
 
-class TestRequires(unittest.TestCase):
+class TestDependencies(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mmd = modulemd.ModuleMetadata()
 
+    def test_add_buildrequires(self):
+        self.mmd.buildrequires = dict()
+        self.mmd.add_buildrequires("AddBRName", "AddBRVersion")
+        self.assertEqual(self.mmd.buildrequires, { "AddBRName" : "AddBRVersion" })
+
+    def test_update_buildrequires(self):
+        self.mmd.buildrequires = dict()
+        self.mmd.update_buildrequires("UpdateBRName", "UpdateBRVersion")
+        self.assertEqual(self.mmd.buildrequires, { "UpdateBRName" : "UpdateBRVersion" })
+        self.mmd.update_buildrequires("UpdateBRName", "UpdateBRVersion-1")
+        self.assertEqual(self.mmd.buildrequires, { "UpdateBRName" : "UpdateBRVersion-1" })
+
+    def test_del_buildrequires(self):
+        self.mmd.buildrequires = { "DelBRName" : "DelBRVersion" }
+        self.mmd.del_buildrequires("DelBRName")
+        self.assertEqual(self.mmd.buildrequires, dict())
+
+    def test_clear_buildrequires(self):
+        self.mmd.buildrequires = { "ClearBRName" : "ClearBRVersion" }
+        self.mmd.clear_buildrequires()
+
     def test_add_requires(self):
         self.mmd.requires = dict()
-        self.mmd.add_requires("AddName", "AddVersion")
-        self.assertEqual(self.mmd.requires, { "AddName" : "AddVersion" })
+        self.mmd.add_requires("AddRName", "AddRVersion")
+        self.assertEqual(self.mmd.requires, { "AddRName" : "AddRVersion" })
 
     def test_update_requires(self):
         self.mmd.requires = dict()
-        self.mmd.update_requires("UpdateName", "UpdateVersion")
-        self.assertEqual(self.mmd.requires, { "UpdateName" : "UpdateVersion" })
-        self.mmd.update_requires("UpdateName", "UpdateVersion-1")
-        self.assertEqual(self.mmd.requires, { "UpdateName" : "UpdateVersion-1" })
+        self.mmd.update_requires("UpdateRName", "UpdateRVersion")
+        self.assertEqual(self.mmd.requires, { "UpdateRName" : "UpdateRVersion" })
+        self.mmd.update_requires("UpdateRName", "UpdateRVersion-1")
+        self.assertEqual(self.mmd.requires, { "UpdateRName" : "UpdateRVersion-1" })
 
     def test_del_requires(self):
-        self.mmd.requires = { "DelName" : "DelVersion" }
-        self.mmd.del_requires("DelName")
+        self.mmd.requires = { "DelRName" : "DelRVersion" }
+        self.mmd.del_requires("DelRName")
         self.assertEqual(self.mmd.requires, dict())
 
     def test_clear_requires(self):
-        self.mmd.requires = { "ClearName" : "ClearVersion" }
+        self.mmd.requires = { "ClearRName" : "ClearRVersion" }
         self.mmd.clear_requires()
         self.assertEqual(self.mmd.requires, dict())
 

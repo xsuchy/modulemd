@@ -35,19 +35,38 @@ class ModuleRPMs(ModuleContent):
         self._fulltree = True
         self._packages = dict()
 
-    def add_package(self, p, arches=None, multilib=None):
+    def add_package(self, p, commit=None, repository=None, cache=None, arches=None, multilib=None):
         """Adds a package to the package list.
 
         :param str p: Package name
+        :param commit: Commit hash pointing to the package sources
+        :param repository: Path to the VCS repository with the sources
+        :param cache: Path to the lookaside cache
         :param arches: Architectures the package is available on
         :param multilib: Architectures the package is installed as multilib on
+        :param commit: str or None
+        :param repository: str or None
+        :param cache: str or None
         :type arches: list or None
         :type multilib: list or None
+        :raises TypeError: If the supplied data type is invalid
         """
         pkgs = self._packages
         pkgs[p] = None
-        if arches or multilib:
+        if arches or multilib or commit or repository or cache:
             pkgs[p] = dict()
+            if commit:
+                if not isinstance(commit, str):
+                    raise TypeError("commit must be a string")
+                pkgs[p]["commit"] = commit
+            if repository:
+                if not isinstance(repository, str):
+                    raise TypeError("repository must be a string")
+                pkgs[p]["repository"] = repository
+            if cache:
+                if not isinstance(cache, str):
+                    raise TypeError("cache must be a string")
+                pkgs[p]["cache"] = cache
             if arches:
                 if not isinstance(arches, list):
                     raise TypeError("arches requires a list")

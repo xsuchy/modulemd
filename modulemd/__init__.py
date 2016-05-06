@@ -56,14 +56,17 @@ class ModuleMetadata(object):
         self.mdversion = max(supported_mdversions)
         self.name = ""
         self.version = ""
+        self.release = ""
         self.summary = ""
         self.description = ""
         self.module_licenses = set()
         self.content_licenses = set()
+        self.buildrequires = dict()
         self.requires = dict()
         self.community = ""
         self.documentation = ""
         self.tracker = ""
+        self.xmd = dict()
         self.components = None
 
     def load(self, f):
@@ -89,13 +92,17 @@ class ModuleMetadata(object):
         self.mdversion = yml["version"]
         self.name = yml["data"]["name"]
         self.version = yml["data"]["version"]
+        self.release = yml["data"]["release"]
         self.summary = yml["data"]["summary"]
         self.description = str(yml["data"]["description"]).strip()
         self.module_licenses = set(yml["data"]["license"]["module"])
         if "content" in yml["data"]["license"]:
             self.content_licenses = set(yml["data"]["license"]["content"])
-        if "requires" in yml["data"]:
-            self.requires = yml["data"]["requires"]
+        if "dependencies" in yml["data"]:
+            if "buildrequires" in yml["data"]["dependencies"]:
+                self.buildrequires = yml["data"]["dependencies"]["buildrequires"]
+            if "requires" in yml["data"]["dependencies"]:
+                self.requires = yml["data"]["dependencies"]["requires"]
         if "references" in yml["data"]:
             if "community" in yml["data"]["references"]:
                 self.community = yml["data"]["references"]["community"]
@@ -103,6 +110,8 @@ class ModuleMetadata(object):
                 self.documentation = yml["data"]["references"]["documentation"]
             if "tracker" in yml["data"]["references"]:
                 self.tracker = yml["data"]["references"]["tracker"]
+        if "xmd" in yml["data"]:
+            self.xmd = yml["data"]["xmd"]
         if "components" in yml["data"]:
             self.components = ModuleComponents()
             if "rpms" in yml["data"]["components"]:
@@ -117,6 +126,12 @@ class ModuleMetadata(object):
                     for p, e in yml["data"]["components"]["rpms"]["packages"].items():
                         extras = dict()
                         if e:
+                            if "repository" in e:
+                                extras["repository"] = e["repository"]
+                            if "cache" in e:
+                                extras["cache"] = e["cache"]
+                            if "commit" in e:
+                                extras["commit"] = e["commit"]
                             if "arches" in e:
                                 extras["arches"] = e["arches"]
                             if "multilib" in e:
@@ -148,14 +163,19 @@ class ModuleMetadata(object):
         data["data"] = dict()
         data["data"]["name"] = self.name
         data["data"]["version"] = self.version
+        data["data"]["release"] = self.release
         data["data"]["summary"] = self.summary
         data["data"]["description"] = self.description
         data["data"]["license"] = dict()
         data["data"]["license"]["module"] = list(self.module_licenses)
         if self.content_licenses:
             data["data"]["license"]["content"] = list(self.content_licenses)
-        if self.requires:
-            data["data"]["requires"] = self.requires
+        if self.buildrequires or self.requires:
+            data["data"]["dependencies"] = dict()
+            if self.buildrequires:
+                data["data"]["dependencies"]["buildrequires"] = self.buildrequires
+            if self.requires:
+                data["data"]["dependencies"]["requires"] = self.requires
         if self.community or self.documentation or self.tracker:
             data["data"]["references"] = dict()
             if self.community:
@@ -164,6 +184,8 @@ class ModuleMetadata(object):
                 data["data"]["references"]["documentation"] = self.documentation
             if self.tracker:
                 data["data"]["references"]["tracker"] = self.tracker
+        if self.xmd:
+            data["data"]["xmd"] = self.xmd
         if self.components:
             data["data"]["components"] = dict()
             if self.components.rpms:
@@ -177,6 +199,12 @@ class ModuleMetadata(object):
                     for p, e in self.components.rpms.packages.items():
                         extra = dict()
                         if isinstance(e, dict):
+                            if "commit" in e:
+                                extra["commit"] = e["commit"]
+                            if "repository" in e:
+                                extra["repository"] = e["repository"]
+                            if "cache" in e:
+                                extra["cache"] = e["cache"]
                             if "arches" in e:
                                 extra["arches"] = e["arches"]
                             if "multilib" in e:
@@ -198,6 +226,8 @@ class ModuleMetadata(object):
             raise TypeError("name must be a string")
         if not isinstance(self.version, str):
             raise TypeError("version must be a string")
+        if not isinstance(self.release, str):
+            raise TypeError("release must be a string")
         if not isinstance(self.summary, str):
             raise TypeError("summary must be a string")
         if not isinstance(self.description, str):
@@ -212,10 +242,15 @@ class ModuleMetadata(object):
         for l in self.content_licenses:
             if not isinstance(l, str):
                 raise TypeError("content_licenses must be a set of strings")
+        if not isinstance(self.buildrequires, dict):
+            raise TypeError("buildrequires must be a dictionary")
+        for n, v in self.buildrequires.items():
+            if not isinstance(n, str) or not isinstance(v, str):
+                raise TypeError("buildrequires keys and values must be strings")
         if not isinstance(self.requires, dict):
             raise TypeError("requires must be a dictionary")
-        for r, v in self.requires.items():
-            if not isinstance(r, str) or not isinstance(v, str):
+        for n, v in self.requires.items():
+            if not isinstance(n, str) or not isinstance(v, str):
                 raise TypeError("requires keys and values must be strings")
         if not isinstance(self.community, str):
             raise TypeError("community must be a string")
@@ -223,6 +258,8 @@ class ModuleMetadata(object):
             raise TypeError("documentation must be a string")
         if not isinstance(self.tracker, str):
             raise TypeError("tracker must be a string")
+        if not isinstance(self.xmd, dict):
+            raise TypeError("xmd must be a dictionary")
         if not isinstance(self.components, ModuleComponents):
             raise TypeError("components must be an instance of ModuleComponents")
         if self.components.rpms:
@@ -244,6 +281,15 @@ class ModuleMetadata(object):
                         for k, v in e.items():
                             if not isinstance(k, str):
                                 raise TypeError("rpms extras keys must be strings")
+                            if k == "commit" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms commit must be a string")
+                            if k == "repository" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms repository must be a string")
+                            if k == "cache" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms cache must be a string")
                             if k == "arches" and v:
                                 if not isinstance(v, list):
                                     raise TypeError("rpms arches must be a list")
@@ -260,12 +306,15 @@ class ModuleMetadata(object):
             raise ValueError("name is required")
         if not self.version:
             raise ValueError("version is required")
+        if not self.release:
+            raise ValueError("release is required")
         if not self.summary:
             raise ValueError("summary is required")
         if not self.description:
             raise ValueError("description is required")
         if not self.module_licenses:
             raise ValueError("at least one module license is required")
+        # TODO: Validate dependency version formats
         return True
 
     @property
@@ -302,6 +351,15 @@ class ModuleMetadata(object):
     @version.setter
     def version(self, s):
         self._version = str(s)
+
+    @property
+    def release(self):
+        """A string property representing the release of the module."""
+        return self._release
+
+    @release.setter
+    def release(self, s):
+        self._release = str(s)
 
     @property
     def summary(self):
@@ -417,8 +475,46 @@ class ModuleMetadata(object):
             del self._requires[str(n)]
 
     def clear_requires(self):
-        """Removes all the dependencies."""
+        """Removes all required runtime dependencies."""
         self._requires = dict()
+
+    @property
+    def buildrequires(self):
+        """A dictionary property representing the required build dependencies
+        of the module.
+
+        Keys are the required module names (strings), values are their
+        minimum required versions (also strings).
+        """
+        return self._buildrequires
+
+    @buildrequires.setter
+    def buildrequires(self, d):
+        if d and not isinstance(d, dict):
+            raise TypeError("Incorrect data type passed for buildrequires")
+        self._buildrequires = d
+
+    def add_buildrequires(self, n, v):
+        """Adds a module build dependency.
+
+        :param str n: Required module name
+        :param str v: Required module version
+        """
+        self._buildrequires[str(n)] = str(v)
+
+    update_buildrequires = add_buildrequires
+
+    def del_buildrequires(self, n):
+        """Deletes the build dependency on the supplied module.
+
+        :param str n: Required module name
+        """
+        if str(n) in self._buildrequires:
+            del self._buildrequires[str(n)]
+
+    def clear_buildrequires(self):
+        """Removes all build dependencies."""
+        self._buildrequires = dict()
 
     @property
     def community(self):
@@ -449,6 +545,17 @@ class ModuleMetadata(object):
     @tracker.setter
     def tracker(self, s):
         self._tracker = str(s)
+
+    @property
+    def xmd(self):
+        """A dictionary property containing user-defined data."""
+        return self._xmd
+
+    @xmd.setter
+    def xmd(self, d):
+        if d and not isinstance(d, dict):
+            raise TypeError("Incorrect data supplied for xmd")
+        self._xmd = d
 
     @property
     def components(self):

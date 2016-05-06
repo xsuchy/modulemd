@@ -2,7 +2,8 @@ document: modulemd
 version: 0
 data:
         name: test
-        version: 1.23-1
+        version: 1.23
+        release: 4
         summary: A test module
         description: >
                 This module is a part of the modulemd test suite.
@@ -12,8 +13,13 @@ data:
                 content:
                         - GPL+
                         - GPLv3
-        requires:
-                modulemd: 42-42
+        xmd:
+                userid: userdata
+        dependencies:
+                buildrequires:
+                        example: 84-84
+                requires:
+                        modulemd: 42-42
         references:
                 community: http://www.example.com/community
                 documentation: http://www.example.com/documentation
@@ -27,3 +33,6 @@ data:
                                 bravo:
                                         arches: [ charlie, delta ]
                                         multilib: [ echo ]
+                                        commit: foxtrot
+                                        repository: golf
+                                        cache: hotel

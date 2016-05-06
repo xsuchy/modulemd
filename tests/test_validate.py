@@ -59,6 +59,14 @@ class TestValidate(unittest.TestCase):
         self.mmd.version = ""
         self.assertRaises(ValueError, self.mmd.validate)
 
+    def test_validate_release1(self):
+        self.mmd._release = None
+        self.assertRaises(TypeError, self.mmd.validate)
+    
+    def test_validate_release2(self):
+        self.mmd._release = ""
+        self.assertRaises(ValueError, self.mmd.validate)
+
     def test_validate_summary1(self):
         self.mmd._summary = None
         self.assertRaises(TypeError, self.mmd.validate)
@@ -123,6 +131,10 @@ class TestValidate(unittest.TestCase):
         self.mmd._tracker = None
         self.assertRaises(TypeError, self.mmd.validate)
 
+    def test_validate_xmd(self):
+        self.mmd._xmd = 1
+        self.assertRaises(TypeError, self.mmd.validate)
+
     def test_validate_components(self):
         self.mmd._components = None
         self.assertRaises(TypeError, self.mmd.validate)
@@ -169,6 +181,18 @@ class TestValidate(unittest.TestCase):
 
     def test_validate_rpms_packages8(self):
         self.mmd.components.rpms._packages = { "foo" : { "multilib" : [1, 2, 3] } }
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_packages9(self):
+        self.mmd.components.rpms._packages = { "foo" : { "commit" : 1 } }
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_packages10(self):
+        self.mmd.components.rpms._packages = { "foo" : { "repository" : 1 } }
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_packages11(self):
+        self.mmd.components.rpms._packages = { "foo" : { "cache" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
 if __name__ == "__main__":

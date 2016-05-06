@@ -40,22 +40,28 @@ class TestIO(unittest.TestCase):
         mmd.load(filename)
         self.assertEqual(mmd.mdversion, 0)
         self.assertEqual(mmd.name, "test")
-        self.assertEqual(mmd.version, "1.23-1")
+        self.assertEqual(mmd.version, "1.23")
+        self.assertEqual(mmd.release, "4")
         self.assertEqual(mmd.summary, "A test module")
         self.assertEqual(mmd.description,
             "This module is a part of the modulemd test suite.")
         self.assertEqual(mmd.module_licenses, set(["MIT"]))
         self.assertEqual(mmd.content_licenses, set(["GPL+", "GPLv3"]))
+        self.assertEqual(mmd.buildrequires, {"example" : "84-84"})
         self.assertEqual(mmd.requires, {"modulemd" : "42-42"})
         self.assertEqual(mmd.community, "http://www.example.com/community")
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
+        self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertFalse(mmd.components.rpms.dependencies)
         self.assertFalse(mmd.components.rpms.fulltree)
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : None,
               "bravo" : { "arches" : [ "charlie", "delta" ],
-                          "multilib" : [ "echo" ] } } )
+                          "multilib" : [ "echo" ],
+                          "commit" : "foxtrot",
+                          "repository" : "golf",
+                          "cache" : "hotel" } } )
 
     def test_loads(self, yaml=None):
         mmd = modulemd.ModuleMetadata()
@@ -64,18 +70,23 @@ class TestIO(unittest.TestCase):
             version: 0
             data:
                 name: test
-                version: 1.23-1
+                version: 1.23
+                release: 4
                 summary: A test module
                 description: >
                     This module is a part of the modulemd test suite.
                 license:
                     module: [ MIT ]
                     content: [ GPL+, GPLv3 ]
-                requires: { modulemd: 42-42 }
+                dependencies:
+                    buildrequires: { example: 84-84 }
+                    requires: { modulemd: 42-42 }
                 references:
                     community: http://www.example.com/community
                     documentation: http://www.example.com/documentation
                     tracker: http://www.example.com/tracker
+                xmd:
+                    userid: userdata
                 components:
                     rpms:
                         dependencies: False
@@ -85,50 +96,63 @@ class TestIO(unittest.TestCase):
                             bravo:
                                 arches: [ charlie, delta ]
                                 multilib: [ echo ]
+                                commit: foxtrot
+                                repository: golf
+                                cache: hotel
         """
         if not yaml:
             yaml = document
         mmd.loads(yaml)
         self.assertEqual(mmd.mdversion, 0)
         self.assertEqual(mmd.name, "test")
-        self.assertEqual(mmd.version, "1.23-1")
+        self.assertEqual(mmd.version, "1.23")
+        self.assertEqual(mmd.release, "4")
         self.assertEqual(mmd.summary, "A test module")
         self.assertEqual(mmd.description,
             "This module is a part of the modulemd test suite.")
         self.assertEqual(mmd.module_licenses, set(["MIT"]))
         self.assertEqual(mmd.content_licenses, set(["GPL+", "GPLv3"]))
+        self.assertEqual(mmd.buildrequires, {"example" : "84-84"})
         self.assertEqual(mmd.requires, {"modulemd" : "42-42"})
         self.assertEqual(mmd.community, "http://www.example.com/community")
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
+        self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertFalse(mmd.components.rpms.dependencies)
         self.assertFalse(mmd.components.rpms.fulltree)
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : None,
               "bravo" : { "arches" : [ "charlie", "delta" ],
-                          "multilib" : [ "echo" ] } } )
+                          "multilib" : [ "echo" ],
+                          "commit" : "foxtrot",
+                          "repository" : "golf",
+                          "cache" : "hotel" } } )
 
     def test_dump(self):
         mmd = modulemd.ModuleMetadata()
         mmd.mdversion = 0
         mmd.name = "test"
-        mmd.version = "1.23-1"
+        mmd.version = "1.23"
+        mmd.release = "4"
         mmd.summary = "A test module"
         mmd.description = "This module is a part of the modulemd test suite."
         mmd.add_module_license("MIT")
         mmd.add_content_license("GPL+")
         mmd.add_content_license("GPLv3")
+        mmd.add_buildrequires("example", "84-84")
         mmd.add_requires("modulemd", "42-42")
         mmd.community = "http://www.example.com/community"
         mmd.documentation = "http://www.example.com/documentation"
         mmd.tracker = "http://www.example.com/tracker"
+        mmd.xmd = { "userid" : "userdata" }
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = False
         mmd.components.rpms.fulltree = False
         mmd.components.rpms.add_package("alfa")
         mmd.components.rpms.add_package("bravo",
-            arches=["charlie", "delta"], multilib=["echo"])
+            arches=["charlie", "delta"], multilib=["echo"],
+            commit="foxtrot", repository="golf", cache="hotel")
         mmd.dump("tests/dump.yaml")
         self.test_load(filename="tests/dump.yaml")
 
@@ -136,23 +160,27 @@ class TestIO(unittest.TestCase):
         mmd = modulemd.ModuleMetadata()
         mmd.mdversion = 0
         mmd.name = "test"
-        mmd.version = "1.23-1"
+        mmd.version = "1.23"
+        mmd.release = "4"
         mmd.summary = "A test module"
         mmd.description = "This module is a part of the modulemd test suite."
         mmd.add_module_license("MIT")
         mmd.add_content_license("GPL+")
         mmd.add_content_license("GPLv3")
+        mmd.add_buildrequires("example", "84-84")
         mmd.add_requires("modulemd", "42-42")
         mmd.community = "http://www.example.com/community"
         mmd.documentation = "http://www.example.com/documentation"
         mmd.tracker = "http://www.example.com/tracker"
+        mmd.xmd = { "userid" : "userdata" }
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = False
         mmd.components.rpms.fulltree = False
         mmd.components.rpms.add_package("alfa")
         mmd.components.rpms.add_package("bravo",
-            arches=["charlie", "delta"], multilib=["echo"])
+            arches=["charlie", "delta"], multilib=["echo"],
+            commit="foxtrot", repository="golf", cache="hotel")
         self.test_loads(yaml=mmd.dumps())
 
 if __name__ == "__main__":
