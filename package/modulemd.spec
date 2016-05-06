@@ -2,7 +2,7 @@
 
 Name:           modulemd
 Version:        0
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Module metadata manipulation library
 License:        MIT
 URL:            https://pagure.io/fm-metadata
@@ -55,5 +55,8 @@ Requires:       python3-PyYAML
 %{python3_sitelib}/*
 
 %changelog
+* Fri May 06 2016 Petr Šabata <contyk@redhat.com> - 0-1
+- New metadata format
+
 * Mon May 02 2016 Petr Šabata <contyk@redhat.com> - 0-0
 - This package was build automatically.
