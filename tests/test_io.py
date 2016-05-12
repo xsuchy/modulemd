@@ -56,8 +56,9 @@ class TestIO(unittest.TestCase):
         self.assertFalse(mmd.components.rpms.dependencies)
         self.assertFalse(mmd.components.rpms.fulltree)
         self.assertEqual(mmd.components.rpms.packages,
-            { "alfa" : None,
-              "bravo" : { "arches" : [ "charlie", "delta" ],
+            { "alfa" : { "rationale" : "alfa rationale" },
+              "bravo" : { "rationale" : "bravo rationale",
+                          "arches" : [ "charlie", "delta" ],
                           "multilib" : [ "echo" ],
                           "commit" : "foxtrot",
                           "repository" : "golf",
@@ -92,8 +93,10 @@ class TestIO(unittest.TestCase):
                         dependencies: False
                         fulltree: False
                         packages:
-                            alfa: ~
+                            alfa:
+                                rationale: alfa rationale
                             bravo:
+                                rationale: bravo rationale
                                 arches: [ charlie, delta ]
                                 multilib: [ echo ]
                                 commit: foxtrot
@@ -121,8 +124,9 @@ class TestIO(unittest.TestCase):
         self.assertFalse(mmd.components.rpms.dependencies)
         self.assertFalse(mmd.components.rpms.fulltree)
         self.assertEqual(mmd.components.rpms.packages,
-            { "alfa" : None,
-              "bravo" : { "arches" : [ "charlie", "delta" ],
+            { "alfa" : { "rationale" : "alfa rationale" },
+              "bravo" : { "rationale" : "bravo rationale",
+                          "arches" : [ "charlie", "delta" ],
                           "multilib" : [ "echo" ],
                           "commit" : "foxtrot",
                           "repository" : "golf",
@@ -149,8 +153,8 @@ class TestIO(unittest.TestCase):
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = False
         mmd.components.rpms.fulltree = False
-        mmd.components.rpms.add_package("alfa")
-        mmd.components.rpms.add_package("bravo",
+        mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
+        mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
             commit="foxtrot", repository="golf", cache="hotel")
         mmd.dump("tests/dump.yaml")
@@ -177,8 +181,8 @@ class TestIO(unittest.TestCase):
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = False
         mmd.components.rpms.fulltree = False
-        mmd.components.rpms.add_package("alfa")
-        mmd.components.rpms.add_package("bravo",
+        mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
+        mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
             commit="foxtrot", repository="golf", cache="hotel")
         self.test_loads(yaml=mmd.dumps())

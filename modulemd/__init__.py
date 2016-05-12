@@ -125,17 +125,17 @@ class ModuleMetadata(object):
                 if "packages" in yml["data"]["components"]["rpms"]:
                     for p, e in yml["data"]["components"]["rpms"]["packages"].items():
                         extras = dict()
-                        if e:
-                            if "repository" in e:
-                                extras["repository"] = e["repository"]
-                            if "cache" in e:
-                                extras["cache"] = e["cache"]
-                            if "commit" in e:
-                                extras["commit"] = e["commit"]
-                            if "arches" in e:
-                                extras["arches"] = e["arches"]
-                            if "multilib" in e:
-                                extras["multilib"] = e["multilib"]
+                        extras["rationale"] = e["rationale"]
+                        if "repository" in e:
+                            extras["repository"] = e["repository"]
+                        if "cache" in e:
+                            extras["cache"] = e["cache"]
+                        if "commit" in e:
+                            extras["commit"] = e["commit"]
+                        if "arches" in e:
+                            extras["arches"] = e["arches"]
+                        if "multilib" in e:
+                            extras["multilib"] = e["multilib"]
                         self.components.rpms.add_package(p, **extras)
 
     def dump(self, f):
@@ -198,17 +198,17 @@ class ModuleMetadata(object):
                     data["data"]["components"]["rpms"]["packages"] = dict()
                     for p, e in self.components.rpms.packages.items():
                         extra = dict()
-                        if isinstance(e, dict):
-                            if "commit" in e:
-                                extra["commit"] = e["commit"]
-                            if "repository" in e:
-                                extra["repository"] = e["repository"]
-                            if "cache" in e:
-                                extra["cache"] = e["cache"]
-                            if "arches" in e:
-                                extra["arches"] = e["arches"]
-                            if "multilib" in e:
-                                extra["multilib"] = e["multilib"]
+                        extra["rationale"] = e["rationale"]
+                        if "commit" in e:
+                            extra["commit"] = e["commit"]
+                        if "repository" in e:
+                            extra["repository"] = e["repository"]
+                        if "cache" in e:
+                            extra["cache"] = e["cache"]
+                        if "arches" in e:
+                            extra["arches"] = e["arches"]
+                        if "multilib" in e:
+                            extra["multilib"] = e["multilib"]
                         data["data"]["components"]["rpms"]["packages"][p] = \
                             extra
         return yaml.dump(data)
@@ -275,33 +275,35 @@ class ModuleMetadata(object):
                 for p, e in self.components.rpms.packages.items():
                     if not isinstance(p, str):
                         raise TypeError("rpms.packages keys must be strings")
-                    if e:
-                        if not isinstance(e, dict):
-                            raise TypeError("rpms.packages values must dictionaries")
-                        for k, v in e.items():
-                            if not isinstance(k, str):
-                                raise TypeError("rpms extras keys must be strings")
-                            if k == "commit" and v:
-                                if not isinstance(v, str):
-                                    raise TypeError("rpms commit must be a string")
-                            if k == "repository" and v:
-                                if not isinstance(v, str):
-                                    raise TypeError("rpms repository must be a string")
-                            if k == "cache" and v:
-                                if not isinstance(v, str):
-                                    raise TypeError("rpms cache must be a string")
-                            if k == "arches" and v:
-                                if not isinstance(v, list):
-                                    raise TypeError("rpms arches must be a list")
-                                for s in v:
-                                    if not isinstance(s, str):
-                                        raise TypeError("arches must be a list of strings")
-                            if k == "multilib" and v:
-                                if not isinstance(v, list):
-                                    raise TypeError("rpms multilib must be a list")
-                                for s in v:
-                                    if not isinstance(s, str):
-                                        raise TypeError("multilib must be a list of strings")
+                    if not isinstance(e, dict):
+                        raise TypeError("rpms.packages values must dictionaries")
+                    for k, v in e.items():
+                        if not isinstance(k, str):
+                            raise TypeError("rpms extras keys must be strings")
+                        if k == "rationale" and v:
+                            if not isinstance(v, str):
+                                raise TypeError("rpms rationale must be a string")
+                        if k == "commit" and v:
+                            if not isinstance(v, str):
+                                raise TypeError("rpms commit must be a string")
+                        if k == "repository" and v:
+                            if not isinstance(v, str):
+                                raise TypeError("rpms repository must be a string")
+                        if k == "cache" and v:
+                            if not isinstance(v, str):
+                                raise TypeError("rpms cache must be a string")
+                        if k == "arches" and v:
+                            if not isinstance(v, list):
+                                raise TypeError("rpms arches must be a list")
+                            for s in v:
+                                if not isinstance(s, str):
+                                    raise TypeError("arches must be a list of strings")
+                        if k == "multilib" and v:
+                            if not isinstance(v, list):
+                                raise TypeError("rpms multilib must be a list")
+                            for s in v:
+                                if not isinstance(s, str):
+                                    raise TypeError("multilib must be a list of strings")
         if not self.name:
             raise ValueError("name is required")
         if not self.version:
@@ -314,6 +316,10 @@ class ModuleMetadata(object):
             raise ValueError("description is required")
         if not self.module_licenses:
             raise ValueError("at least one module license is required")
+        if self.components.rpms:
+            for p, e in self.components.rpms.packages.items():
+                if not "rationale" in e:
+                    raise ValueError(p, "has no rationale")
         # TODO: Validate dependency version formats
         return True
 

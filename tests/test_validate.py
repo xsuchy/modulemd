@@ -160,39 +160,43 @@ class TestValidate(unittest.TestCase):
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages3(self):
+        self.mmd.components.rpms._packages = { "foo" : dict() }
+        self.assertRaises(ValueError, self.mmd.validate)
+
+    def test_validate_rpms_packages4(self):
         self.mmd.components.rpms._packages = { 1 : None }
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_rpms_packages4(self):
-        self.mmd.components.rpms._packages = { "foo" : { 1 : None } }
-        self.assertRaises(TypeError, self.mmd.validate)
-
     def test_validate_rpms_packages5(self):
-        self.mmd.components.rpms._packages = { "foo" : { "arches" : 1 } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", 1 : None } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages6(self):
-        self.mmd.components.rpms._packages = { "foo" : { "arches" : [1, 2, 3] } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale": "", "arches" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages7(self):
-        self.mmd.components.rpms._packages = { "foo" : { "multilib" : 1 } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "arches" : [1, 2, 3] } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages8(self):
-        self.mmd.components.rpms._packages = { "foo" : { "multilib" : [1, 2, 3] } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "multilib" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages9(self):
-        self.mmd.components.rpms._packages = { "foo" : { "commit" : 1 } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "multilib" : [1, 2, 3] } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages10(self):
-        self.mmd.components.rpms._packages = { "foo" : { "repository" : 1 } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "commit" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms_packages11(self):
-        self.mmd.components.rpms._packages = { "foo" : { "cache" : 1 } }
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "repository" : 1 } }
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_packages12(self):
+        self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "cache" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
 if __name__ == "__main__":

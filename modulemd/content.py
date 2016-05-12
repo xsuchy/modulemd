@@ -46,13 +46,18 @@ class ModuleContent(object):
             raise TypeError("packages requires a dict")
         self._packages = d
 
-    def add_package(self, p):
+    def add_package(self, p, rationale=""):
         """Adds a package to the package list.
 
         :param str p: Package name
+        :param str rationale: Rationale for this package
+        :raises TypeError: If the supplied data type is not valid
         """
+        if not isinstance(rationale, str):
+            raise TypeError("rationale must be a string")
         pkgs = self._packages
-        pkgs[p] = None
+        pkgs[p] = dict()
+        pkgs[p]["rationale"] = rationale
         self.packages = pkgs
 
     update_package = add_package

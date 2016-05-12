@@ -29,8 +29,10 @@ data:
                         dependencies: False
                         fulltree: False
                         packages:
-                                alfa: ~
+                                alfa:
+                                        rationale: alfa rationale
                                 bravo:
+                                        rationale: bravo rationale
                                         arches: [ charlie, delta ]
                                         multilib: [ echo ]
                                         commit: foxtrot

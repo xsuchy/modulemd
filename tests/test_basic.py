@@ -55,7 +55,7 @@ class TestBasic(unittest.TestCase):
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
         cls.mmd.components.rpms.dependencies = False
         cls.mmd.components.rpms.fulltree = False
-        cls.mmd.components.rpms.packages = { "rpm" : None }
+        cls.mmd.components.rpms.packages = { "rpm" : { "rationale" : "" } }
 
     def test_mdversion(self):
         self.assertIn(self.mmd.mdversion, modulemd.supported_mdversions)
@@ -112,7 +112,7 @@ class TestBasic(unittest.TestCase):
         self.assertFalse(self.mmd.components.rpms.fulltree)
 
     def test_rpm_packages(self):
-        self.assertEqual(self.mmd.components.rpms.packages, { "rpm" : None })
+        self.assertEqual(self.mmd.components.rpms.packages, { "rpm" : { "rationale" : "" } })
 
 if __name__ == "__main__":
     unittest.main()

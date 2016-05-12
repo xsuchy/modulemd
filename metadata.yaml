@@ -88,10 +88,16 @@ data:
                         fulltree: True
                         # RPM-based packages of this module.
                         # Keys are the VCS/SRPM names, values dictionaries holding
-                        # additional information where required, or null.
+                        # additional information.
                         # Optional
                         packages:
                                 bar:
+                                        # Why is this component present.
+                                        # A simple, free-form string.  This will most
+                                        # likely change in the future.
+                                        # http://taiga.fedorainfracloud.org/project/modularity/us/188
+                                        # Required.
+                                        rationale: We need this to demonstrate stuff.
                                         # Use this repository if it's different from
                                         # the build system configuration.
                                         # Optional.
@@ -106,8 +112,10 @@ data:
                                         # Optional.
                                         commit: 26ca0c0
                                 # baz has no extra options
-                                baz: ~
+                                baz:
+                                        rationale: This one is here to demonstrate other stuff.
                                 xxx:
+                                        rationale: xxx demonstrates arches and multilib.
                                         # xxx is only available on the listed architectures.
                                         # Optional, defaults to all available arches.
                                         arches: [ i686, x86_64 ]
@@ -116,4 +124,5 @@ data:
                                         # versions will be installed on x86_64.
                                         # Optional, defaults to no multilib.
                                         multilib: [ x86_64 ]
-                                xyz: ~
+                                xyz:
+                                        rationale: xyz is another simple component.

@@ -42,7 +42,13 @@ class TestContent(unittest.TestCase):
     def test_add_package(self):
         self.mc.packages = dict()
         self.mc.add_package("Add")
-        self.assertEqual(self.mc.packages, { "Add" : None })
+        self.assertEqual(self.mc.packages, { "Add" : { "rationale" : "" } } )
+
+    def test_add_package_with_rationale(self):
+        self.mc.packages = dict()
+        self.mc.add_package("AddWithRationale", "rationalestr")
+        self.assertEqual(self.mc.packages,
+            { "AddWithRationale" : { "rationale" : "rationalestr" } } )
 
     def test_del_package(self):
         self.mc.packages = { "Del" : None }

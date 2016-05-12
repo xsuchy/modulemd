@@ -42,19 +42,43 @@ class TestRPMs(unittest.TestCase):
     def test_add_package(self):
         self.mr.packages = dict()
         self.mr.add_package("Add")
-        self.assertEqual(self.mr.packages, { "Add" : None })
+        self.assertEqual(self.mr.packages, { "Add" : { "rationale" : "" } } )
+
+    def test_add_package_with_rationale(self):
+        self.mr.packages = dict()
+        self.mr.add_package("AddWithRationale", rationale="rationalestr")
+        self.assertEqual(self.mr.packages,
+            { "AddWithRationale" : { "rationale" : "rationalestr" } } )
 
     def test_add_package_with_arches(self):
         self.mr.packages = dict()
         self.mr.add_package("AddWithArches", arches=["x", "y", "z"])
         self.assertEqual(self.mr.packages,
-            { "AddWithArches" : { "arches" : ["x", "y", "z"] } } )
+            { "AddWithArches" : { "rationale" : "", "arches" : ["x", "y", "z"] } } )
 
     def test_add_package_with_multilib(self):
         self.mr.packages = dict()
         self.mr.add_package("AddWithMultilib", multilib=["x", "y", "z"])
         self.assertEqual(self.mr.packages,
-            { "AddWithMultilib" : { "multilib" : ["x", "y", "z"] } } )
+            { "AddWithMultilib" : { "rationale" : "", "multilib" : ["x", "y", "z"] } } )
+
+    def test_add_package_with_commit(self):
+        self.mr.packages = dict()
+        self.mr.add_package("AddWithCommit", commit="commitstr")
+        self.assertEqual(self.mr.packages,
+            { "AddWithCommit" : { "rationale" : "", "commit" : "commitstr"} } )
+
+    def test_add_package_with_repository(self):
+        self.mr.packages = dict()
+        self.mr.add_package("AddWithRepository", repository="repostr")
+        self.assertEqual(self.mr.packages,
+            { "AddWithRepository" : { "rationale" : "", "repository" : "repostr" } } )
+
+    def test_add_package_with_cache(self):
+        self.mr.packages = dict()
+        self.mr.add_package("AddWithCache", cache="cachestr")
+        self.assertEqual(self.mr.packages,
+            { "AddWithCache" : { "rationale" : "", "cache" : "cachestr" } } )
 
     def test_del_package(self):
         self.mr.packages = { "Del" : None }

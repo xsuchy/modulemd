@@ -35,10 +35,11 @@ class ModuleRPMs(ModuleContent):
         self._fulltree = True
         self._packages = dict()
 
-    def add_package(self, p, commit=None, repository=None, cache=None, arches=None, multilib=None):
+    def add_package(self, p, rationale="", commit=None, repository=None, cache=None, arches=None, multilib=None):
         """Adds a package to the package list.
 
         :param str p: Package name
+        :param str rationale: Rationale for this package
         :param commit: Commit hash pointing to the package sources
         :param repository: Path to the VCS repository with the sources
         :param cache: Path to the lookaside cache
@@ -52,29 +53,28 @@ class ModuleRPMs(ModuleContent):
         :raises TypeError: If the supplied data type is invalid
         """
         pkgs = self._packages
-        pkgs[p] = None
-        if arches or multilib or commit or repository or cache:
-            pkgs[p] = dict()
-            if commit:
-                if not isinstance(commit, str):
-                    raise TypeError("commit must be a string")
-                pkgs[p]["commit"] = commit
-            if repository:
-                if not isinstance(repository, str):
-                    raise TypeError("repository must be a string")
-                pkgs[p]["repository"] = repository
-            if cache:
-                if not isinstance(cache, str):
-                    raise TypeError("cache must be a string")
-                pkgs[p]["cache"] = cache
-            if arches:
-                if not isinstance(arches, list):
-                    raise TypeError("arches requires a list")
-                pkgs[p]["arches"] = arches
-            if multilib:
-                if not isinstance(multilib, list):
-                    raise TypeError("multilib requires a list")
-                pkgs[p]["multilib"] = multilib
+        pkgs[p] = dict()
+        pkgs[p]["rationale"] = rationale
+        if commit:
+            if not isinstance(commit, str):
+                raise TypeError("commit must be a string")
+            pkgs[p]["commit"] = commit
+        if repository:
+            if not isinstance(repository, str):
+                raise TypeError("repository must be a string")
+            pkgs[p]["repository"] = repository
+        if cache:
+            if not isinstance(cache, str):
+                raise TypeError("cache must be a string")
+            pkgs[p]["cache"] = cache
+        if arches:
+            if not isinstance(arches, list):
+                raise TypeError("arches requires a list")
+            pkgs[p]["arches"] = arches
+        if multilib:
+            if not isinstance(multilib, list):
+                raise TypeError("multilib requires a list")
+            pkgs[p]["multilib"] = multilib
         self.packages = pkgs
 
     update_package = add_package
