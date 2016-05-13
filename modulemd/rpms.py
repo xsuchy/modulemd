@@ -45,9 +45,9 @@ class ModuleRPMs(ModuleContent):
         :param cache: Path to the lookaside cache
         :param arches: Architectures the package is available on
         :param multilib: Architectures the package is installed as multilib on
-        :param commit: str or None
-        :param repository: str or None
-        :param cache: str or None
+        :type commit: str or None
+        :type repository: str or None
+        :type cache: str or None
         :type arches: list or None
         :type multilib: list or None
         :raises TypeError: If the supplied data type is invalid
