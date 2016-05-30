@@ -24,5 +24,8 @@ setup(
         "Topic :: Software Development :: Libraries",
         "License :: OSI Approved :: MIT License",
     ],
-    test_suite = "tests"
+    test_suite = "tests",
+    install_requires = [
+        "PyYAML",
+        ],
 )
