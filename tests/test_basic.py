@@ -53,8 +53,7 @@ class TestBasic(unittest.TestCase):
         cls.mmd.xmd = { "key" : "value" }
         cls.mmd.components = modulemd.ModuleComponents()
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
-        cls.mmd.components.rpms.dependencies = False
-        cls.mmd.components.rpms.fulltree = False
+        cls.mmd.components.rpms.dependencies = True
         cls.mmd.components.rpms.packages = { "rpm" : { "rationale" : "" } }
 
     def test_mdversion(self):
@@ -106,10 +105,7 @@ class TestBasic(unittest.TestCase):
         self.assertIsInstance(self.mmd.components.rpms, modulemd.ModuleRPMs)
 
     def test_rpm_dependencies(self):
-        self.assertFalse(self.mmd.components.rpms.dependencies)
-
-    def test_rpm_fulltree(self):
-        self.assertFalse(self.mmd.components.rpms.fulltree)
+        self.assertTrue(self.mmd.components.rpms.dependencies)
 
     def test_rpm_packages(self):
         self.assertEqual(self.mmd.components.rpms.packages, { "rpm" : { "rationale" : "" } })

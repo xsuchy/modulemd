@@ -147,10 +147,6 @@ class TestValidate(unittest.TestCase):
         self.mmd.components.rpms._dependencies = 1
         self.assertRaises(TypeError, self.mmd.validate)
 
-    def test_validate_rpms_fulltree(self):
-        self.mmd.components.rpms._fulltree = 1
-        self.assertRaises(TypeError, self.mmd.validate)
-
     def test_validate_rpms_packages1(self):
         self.mmd.components.rpms._packages = 1
         self.assertRaises(TypeError, self.mmd.validate)

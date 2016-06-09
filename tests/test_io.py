@@ -53,8 +53,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
-        self.assertFalse(mmd.components.rpms.dependencies)
-        self.assertFalse(mmd.components.rpms.fulltree)
+        self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : { "rationale" : "alfa rationale" },
               "bravo" : { "rationale" : "bravo rationale",
@@ -90,8 +89,7 @@ class TestIO(unittest.TestCase):
                     userid: userdata
                 components:
                     rpms:
-                        dependencies: False
-                        fulltree: False
+                        dependencies: True
                         packages:
                             alfa:
                                 rationale: alfa rationale
@@ -121,8 +119,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
-        self.assertFalse(mmd.components.rpms.dependencies)
-        self.assertFalse(mmd.components.rpms.fulltree)
+        self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : { "rationale" : "alfa rationale" },
               "bravo" : { "rationale" : "bravo rationale",
@@ -151,8 +148,7 @@ class TestIO(unittest.TestCase):
         mmd.xmd = { "userid" : "userdata" }
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
-        mmd.components.rpms.dependencies = False
-        mmd.components.rpms.fulltree = False
+        mmd.components.rpms.dependencies = True
         mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
@@ -179,8 +175,7 @@ class TestIO(unittest.TestCase):
         mmd.xmd = { "userid" : "userdata" }
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
-        mmd.components.rpms.dependencies = False
-        mmd.components.rpms.fulltree = False
+        mmd.components.rpms.dependencies = True
         mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],

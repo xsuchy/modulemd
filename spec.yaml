@@ -78,14 +78,13 @@ data:
                 # TODO: Define architectures to build for
                 rpms:
                         # Should this module include dependencies of its RPM packages
-                        # that are not provided by any of the modules it depends on?
-                        # Optional, defaults to True
-                        dependencies: True
-                        # Should this module include all subpackages generated from the
-                        # source packages?  True if yes, False if only the main packages
-                        # should be included.
-                        # Optional, defaults to True
-                        fulltree: True
+                        # that are not provided by any of the modules it depends on at
+                        # runtime?
+                        # Optional, defaults to False
+                        # The module maintainer is responsible for declaring the
+                        # correct inter-modular dependencies and/or bundling all the
+                        # components they require.
+                        dependencies: False
                         # RPM-based packages of this module.
                         # Keys are the VCS/SRPM names, values dictionaries holding
                         # additional information.

@@ -98,17 +98,7 @@ class TestRPMs(unittest.TestCase):
 
     def test_dependencies_default(self):
         default = modulemd.ModuleRPMs()
-        self.assertTrue(default.dependencies)
-
-    def test_fulltree(self):
-        self.mr.fulltree = False
-        self.assertFalse(self.mr.fulltree)
-        self.mr.fulltree = True
-        self.assertTrue(self.mr.fulltree)
-
-    def test_fulltree_default(self):
-        default = modulemd.ModuleRPMs()
-        self.assertTrue(default.fulltree)
+        self.assertFalse(default.dependencies)
 
 if __name__ == "__main__":
     unittest.main()

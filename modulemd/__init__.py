@@ -119,9 +119,6 @@ class ModuleMetadata(object):
                 if "dependencies" in yml["data"]["components"]["rpms"]:
                     self.components.rpms.dependencies = \
                         yml["data"]["components"]["rpms"]["dependencies"]
-                if "fulltree" in yml["data"]["components"]["rpms"]:
-                    self.components.rpms.fulltree = \
-                        yml["data"]["components"]["rpms"]["fulltree"]
                 if "packages" in yml["data"]["components"]["rpms"]:
                     for p, e in yml["data"]["components"]["rpms"]["packages"].items():
                         extras = dict()
@@ -192,8 +189,6 @@ class ModuleMetadata(object):
                 data["data"]["components"]["rpms"] = dict()
                 data["data"]["components"]["rpms"]["dependencies"] = \
                     self.components.rpms.dependencies
-                data["data"]["components"]["rpms"]["fulltree"] = \
-                    self.components.rpms.fulltree
                 if self.components.rpms.packages:
                     data["data"]["components"]["rpms"]["packages"] = dict()
                     for p, e in self.components.rpms.packages.items():
@@ -267,8 +262,6 @@ class ModuleMetadata(object):
                 raise TypeError("rpms must be an instance of ModuleRPMs")
             if not isinstance(self.components.rpms.dependencies, bool):
                 raise TypeError("rpms.dependencies must be a boolean")
-            if not isinstance(self.components.rpms.fulltree, bool):
-                raise TypeError("rpms.fulltree must be a boolean")
             if self.components.rpms.packages:
                 if not isinstance(self.components.rpms.packages, dict):
                     raise TypeError("rpms.packages must be a dictionary")

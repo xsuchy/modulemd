@@ -31,8 +31,7 @@ class ModuleRPMs(ModuleContent):
 
     def __init__(self):
         """Creates a new ModuleRPMs instance."""
-        self._dependencies = True
-        self._fulltree = True
+        self._dependencies = False
         self._packages = dict()
 
     def add_package(self, p, rationale="", commit=None, repository=None, cache=None, arches=None, multilib=None):
@@ -89,15 +88,3 @@ class ModuleRPMs(ModuleContent):
     @dependencies.setter
     def dependencies(self, b):
         self._dependencies = bool(b)
-
-    @property
-    def fulltree(self):
-        """A boolean property indicating whether the whole package tree, for
-        example non-listed subpackages, source packages et al. should be also
-        included within the module or not.
-        """
-        return self._fulltree
-
-    @fulltree.setter
-    def fulltree(self, b):
-        self._fulltree = bool(b)
