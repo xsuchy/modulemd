@@ -32,6 +32,7 @@ class ModuleRPMs(ModuleContent):
     def __init__(self):
         """Creates a new ModuleRPMs instance."""
         self._dependencies = False
+        self._api = set()
         self._packages = dict()
 
     def add_package(self, p, rationale="", commit=None, repository=None, cache=None, arches=None, multilib=None):
@@ -88,3 +89,36 @@ class ModuleRPMs(ModuleContent):
     @dependencies.setter
     def dependencies(self, b):
         self._dependencies = bool(b)
+
+    @property
+    def api(self):
+        """A set of RPM binary package names representing the external,
+        supported API of the module.
+        """
+        return self._api
+
+    @api.setter
+    def api(self, ss):
+        if not isinstance(ss, set):
+            raise TypeError("api requires a set")
+        self._api = ss
+
+    def add_api(self, s):
+        """Adds an RPM binary package API symbol to the set.
+
+        :param str s: RPM binary package name
+        """
+        self._api.add(str(s))
+
+    update_api = add_api
+
+    def del_api(self, s):
+        """Remove the supplied RPM binary package API symbol from the set.
+
+        :param str s: RPM binary package name
+        """
+        self._api.discard(str(s))
+
+    def clear_api(self):
+        """Clears the RPM package name API symbol set."""
+        self._api.clear()

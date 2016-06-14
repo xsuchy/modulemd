@@ -54,6 +54,7 @@ class TestBasic(unittest.TestCase):
         cls.mmd.components = modulemd.ModuleComponents()
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
         cls.mmd.components.rpms.dependencies = True
+        cls.mmd.components.rpms.api = set([ "api" ])
         cls.mmd.components.rpms.packages = { "rpm" : { "rationale" : "" } }
 
     def test_mdversion(self):
@@ -106,6 +107,9 @@ class TestBasic(unittest.TestCase):
 
     def test_rpm_dependencies(self):
         self.assertTrue(self.mmd.components.rpms.dependencies)
+
+    def test_rpm_api(self):
+        self.assertEqual(self.mmd.components.rpms.api, set(["api"]))
 
     def test_rpm_packages(self):
         self.assertEqual(self.mmd.components.rpms.packages, { "rpm" : { "rationale" : "" } })

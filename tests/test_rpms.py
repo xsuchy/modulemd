@@ -100,5 +100,20 @@ class TestRPMs(unittest.TestCase):
         default = modulemd.ModuleRPMs()
         self.assertFalse(default.dependencies)
 
+    def test_add_api(self):
+        self.assertNotIn("AddRPMAPI", self.mr.api)
+        self.mr.add_api("AddRPMAPI")
+        self.assertIn("AddRPMAPI", self.mr.api)
+
+    def test_del_api(self):
+        self.mr.api = set(["DelRPMAPI"])
+        self.mr.del_api("DelRPMAPI")
+        self.assertNotIn("DelRPMAPI", self.mr.api)
+
+    def test_clear_api(self):
+        self.mr.api = set(["ClearRPMAPI"])
+        self.mr.clear_api()
+        self.assertEqual(self.mr.api, set([]))
+
 if __name__ == "__main__":
     unittest.main()

@@ -27,6 +27,9 @@ data:
         components:
                 rpms:
                         dependencies: True
+                        api:
+                                - alfa
+                                - alfa-extras
                         packages:
                                 alfa:
                                         rationale: alfa rationale

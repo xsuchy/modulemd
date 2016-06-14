@@ -54,6 +54,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertTrue(mmd.components.rpms.dependencies)
+        self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : { "rationale" : "alfa rationale" },
               "bravo" : { "rationale" : "bravo rationale",
@@ -90,6 +91,9 @@ class TestIO(unittest.TestCase):
                 components:
                     rpms:
                         dependencies: True
+                        api:
+                            - alfa
+                            - alfa-extras
                         packages:
                             alfa:
                                 rationale: alfa rationale
@@ -120,6 +124,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertTrue(mmd.components.rpms.dependencies)
+        self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
         self.assertEqual(mmd.components.rpms.packages,
             { "alfa" : { "rationale" : "alfa rationale" },
               "bravo" : { "rationale" : "bravo rationale",
@@ -149,6 +154,8 @@ class TestIO(unittest.TestCase):
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True
+        mmd.components.rpms.add_api("alfa")
+        mmd.components.rpms.add_api("alfa-extras")
         mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
@@ -176,6 +183,8 @@ class TestIO(unittest.TestCase):
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True
+        mmd.components.rpms.add_api("alfa")
+        mmd.components.rpms.add_api("alfa-extras")
         mmd.components.rpms.add_package("alfa", rationale="alfa rationale")
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
