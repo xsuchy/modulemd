@@ -2,7 +2,7 @@
 
 Name:           modulemd
 Version:        0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Module metadata manipulation library
 License:        MIT
 URL:            https://pagure.io/fm-metadata
@@ -47,14 +47,17 @@ Requires:       python3-PyYAML
 %{__python3} setup.py test
 
 %files -n python2-%{name}
-%doc README.rst metadata.yaml
+%doc README.rst spec.yaml
 %{python2_sitelib}/*
 
 %files -n python3-%{name}
-%doc README.rst metadata.yaml
+%doc README.rst spec.yaml
 %{python3_sitelib}/*
 
 %changelog
+* Tue Jun 14 2016 Petr Šabata <contyk@redhat.com> - 0-5
+- Rename metadata.yaml to spec.yaml
+
 * Tue Jun 14 2016 Petr Šabata <contyk@redhat.com> - 0-4
 - New metadata format
    - rpms/api now holds the module RPM-defined API
