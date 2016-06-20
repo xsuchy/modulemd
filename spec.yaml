@@ -65,6 +65,31 @@ data:
                 documentation: http://www.example.com/
                 # Upstream bug tracker, if it exists, optional
                 tracker: http://www.example.com/
+        # Profiles define the end user's use cases for the module
+        # and consist of package lists of components to
+        # be installed by default if this module is enabled.
+        # They keys here are the profile names and contain package
+        # lists by component type.  See the example.
+        # Optional, defaults to no profile definitions.
+        # TODO: Profiles deserve detailed documentation.
+        profiles:
+                # The default profile, used unless any other
+                # profile was selected.
+                # Optional, defaults to empty lists.
+                default:
+                        rpms:
+                                - bar
+                                - bar-extras
+                                - baz
+                # An example minimal profile only installing one
+                # component.
+                # Optional, just like any other profile.
+                # XXX: What happens if the system wants to use
+                # an undefined profile name?  Should we fall back
+                # to "default" or just assume an empty list?
+                minimal:
+                        rpms:
+                                - bar
         # Functional components of the module, optional
         components:
                 # RPM content of the module, optional
@@ -105,28 +130,6 @@ data:
                         # Optional, defaults to an empty list.
                         filter:
                                 - bar-nonfoo
-                        # Profiles define the end user's use cases for the module
-                        # and consist of binary RPM package lists of components to
-                        # be installed by default if this module is enabled.
-                        # They keys here are the profile names.
-                        # Optional, defaults to no profile definitions.
-                        # TODO: Profiles deserve detailed documentation.
-                        profiles:
-                                # The default profile, used unless any other
-                                # profile was selected.
-                                # Optional, defaults to an empty list.
-                                default:
-                                        - bar
-                                        - bar-extras
-                                        - baz
-                                # An example minimal profile only installing one
-                                # component.
-                                # Optional, just like any other profile.
-                                # XXX: What happens if the system wants to use
-                                # an undefined profile name?  Should we fall back
-                                # to "default" or just assume an empty list?
-                                minimal:
-                                        - bar
                         # RPM-based packages of this module.
                         # Keys are the VCS/SRPM names, values dictionaries holding
                         # additional information.
