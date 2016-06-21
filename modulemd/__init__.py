@@ -45,6 +45,7 @@ import yaml
 from modulemd.components import ModuleComponents
 from modulemd.content import ModuleContent
 from modulemd.rpms import ModuleRPMs
+from modulemd.profile import ModuleProfile
 
 supported_mdversions = ( 0, )
 
@@ -67,6 +68,7 @@ class ModuleMetadata(object):
         self.documentation = ""
         self.tracker = ""
         self.xmd = dict()
+        self.profiles = dict()
         self.components = None
 
     def load(self, f):
@@ -112,6 +114,12 @@ class ModuleMetadata(object):
                 self.tracker = yml["data"]["references"]["tracker"]
         if "xmd" in yml["data"]:
             self.xmd = yml["data"]["xmd"]
+        if "profiles" in yml["data"]:
+            for profile in yml["data"]["profiles"].keys():
+                self.profiles[profile] = ModuleProfile()
+                if "rpms" in yml["data"]["profiles"][profile]:
+                    self.profiles[profile].rpms = \
+                        set(yml["data"]["profiles"][profile]["rpms"])
         if "components" in yml["data"]:
             self.components = ModuleComponents()
             if "rpms" in yml["data"]["components"]:
@@ -186,6 +194,12 @@ class ModuleMetadata(object):
                 data["data"]["references"]["tracker"] = self.tracker
         if self.xmd:
             data["data"]["xmd"] = self.xmd
+        if self.profiles:
+            data["data"]["profiles"] = dict()
+            for profile in self.profiles.keys():
+                if self.profiles[profile].rpms:
+                    data["data"]["profiles"][profile]["rpms"] = \
+                        list(self.profiles[profile].rpms)
         if self.components:
             data["data"]["components"] = dict()
             if self.components.rpms:
@@ -260,6 +274,18 @@ class ModuleMetadata(object):
             raise TypeError("tracker must be a string")
         if not isinstance(self.xmd, dict):
             raise TypeError("xmd must be a dictionary")
+        if not isinstance(self.profiles, dict):
+            raise TypeError("profiles must be a dictionary")
+        for p in self.profiles.keys():
+            if not isinstance(p, str):
+                raise TypeError("profiles keys must be strings")
+            if not isinstance(self.profiles[p], ModuleProfile):
+                raise TypeError("profiles values must be instances of ModuleProfile")
+            if not isinstance(self.profiles[p].rpms, set):
+                raise TypeError("profile rpms must be sets")
+            for ps in self.profiles[p].rpms:
+                if not isinstance(ps, str):
+                    raise TypeError("profile rpms must be sets of strings")
         if not isinstance(self.components, ModuleComponents):
             raise TypeError("components must be an instance of ModuleComponents")
         if self.components.rpms:
@@ -565,6 +591,17 @@ class ModuleMetadata(object):
         if d and not isinstance(d, dict):
             raise TypeError("Incorrect data supplied for xmd")
         self._xmd = d
+
+    @property
+    def profiles(self):
+        """A dictionary property representing the module profiles."""
+        return self._profiles
+
+    @profiles.setter
+    def profiles(self, o):
+        if not isinstance(o, dict):
+            raise TypeError("Incorrect data types passed for profiles")
+        self._profiles = o
 
     @property
     def components(self):
