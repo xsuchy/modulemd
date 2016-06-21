@@ -425,7 +425,7 @@ class ModuleMetadata(object):
     def module_licenses(self, ss):
         if not isinstance(ss, set):
             raise TypeError("module_licenses requires a set")
-        self._module_licenses = ss
+        self._module_licenses = set([str(x) for x in ss])
 
     def add_module_license(self, s):
         """Adds a module license to the set.
@@ -455,7 +455,7 @@ class ModuleMetadata(object):
     def content_licenses(self, ss):
         if not isinstance(ss, set):
             raise TypeError("content_licenses requires a set")
-        self._content_licenses = ss
+        self._content_licenses = set([str(x) for x in ss])
 
     def add_content_license(self, s):
         """Adds a content license to the set.
@@ -489,7 +489,7 @@ class ModuleMetadata(object):
     def requires(self, d):
         if d and not isinstance(d, dict):
             raise TypeError("Incorrect data type passed for requires")
-        self._requires = d
+        self._requires = { str(k) : str(v) for k, v in d.items() }
 
     def add_requires(self, n, v):
         """Adds a required module dependency.
@@ -527,7 +527,7 @@ class ModuleMetadata(object):
     def buildrequires(self, d):
         if d and not isinstance(d, dict):
             raise TypeError("Incorrect data type passed for buildrequires")
-        self._buildrequires = d
+        self._buildrequires = { str(k) : str(v) for k, v in d.items() }
 
     def add_buildrequires(self, n, v):
         """Adds a module build dependency.
