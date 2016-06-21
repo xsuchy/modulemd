@@ -198,6 +198,7 @@ class ModuleMetadata(object):
             data["data"]["profiles"] = dict()
             for profile in self.profiles.keys():
                 if self.profiles[profile].rpms:
+                    data["data"]["profiles"][profile] = dict()
                     data["data"]["profiles"][profile]["rpms"] = \
                         list(self.profiles[profile].rpms)
         if self.components:

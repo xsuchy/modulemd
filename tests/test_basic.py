@@ -51,6 +51,8 @@ class TestBasic(unittest.TestCase):
         cls.mmd.documentation = "http://www.example.com/documentation"
         cls.mmd.tracker = "http://www.example.com/tracker"
         cls.mmd.xmd = { "key" : "value" }
+        cls.mmd.profiles = { "default" : modulemd.ModuleProfile() }
+        cls.mmd.profiles["default"].rpms = set([ "prof", "ile" ])
         cls.mmd.components = modulemd.ModuleComponents()
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
         cls.mmd.components.rpms.dependencies = True
@@ -98,6 +100,12 @@ class TestBasic(unittest.TestCase):
 
     def test_xmd(self):
         self.assertEqual(self.mmd.xmd, { "key" : "value" })
+
+    def test_profiles(self):
+        self.assertEqual(list(self.mmd.profiles.keys()), ["default"])
+
+    def test_profiles_rpms(self):
+        self.assertEqual(self.mmd.profiles["default"].rpms, set(["prof", "ile"]))
 
     def test_components(self):
         self.assertIsInstance(self.mmd.components, modulemd.ModuleComponents)

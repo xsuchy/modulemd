@@ -53,6 +53,9 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
+        self.assertEqual(sorted(mmd.profiles.keys()), ["default", "minimal"])
+        self.assertEqual(mmd.profiles["default"].rpms, set(["alfa", "alfa-subpackage"]))
+        self.assertEqual(mmd.profiles["minimal"].rpms, set(["alfa"]))
         self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
         self.assertEqual(mmd.components.rpms.packages,
@@ -88,6 +91,14 @@ class TestIO(unittest.TestCase):
                     tracker: http://www.example.com/tracker
                 xmd:
                     userid: userdata
+                profiles:
+                    default:
+                        rpms:
+                            - alfa
+                            - alfa-subpackage
+                    minimal:
+                        rpms:
+                            - alfa
                 components:
                     rpms:
                         dependencies: True
@@ -123,6 +134,9 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.documentation, "http://www.example.com/documentation")
         self.assertEqual(mmd.tracker, "http://www.example.com/tracker")
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
+        self.assertEqual(sorted(mmd.profiles.keys()), ["default", "minimal"])
+        self.assertEqual(mmd.profiles["default"].rpms, set(["alfa", "alfa-subpackage"]))
+        self.assertEqual(mmd.profiles["minimal"].rpms, set(["alfa"]))
         self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
         self.assertEqual(mmd.components.rpms.packages,
@@ -151,6 +165,9 @@ class TestIO(unittest.TestCase):
         mmd.documentation = "http://www.example.com/documentation"
         mmd.tracker = "http://www.example.com/tracker"
         mmd.xmd = { "userid" : "userdata" }
+        mmd.profiles = { "default" : modulemd.ModuleProfile(), "minimal" : modulemd.ModuleProfile() }
+        mmd.profiles["default"].rpms = set(["alfa", "alfa-subpackage"])
+        mmd.profiles["minimal"].rpms = set(["alfa"])
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True
@@ -180,6 +197,9 @@ class TestIO(unittest.TestCase):
         mmd.documentation = "http://www.example.com/documentation"
         mmd.tracker = "http://www.example.com/tracker"
         mmd.xmd = { "userid" : "userdata" }
+        mmd.profiles = { "default" : modulemd.ModuleProfile(), "minimal" : modulemd.ModuleProfile() }
+        mmd.profiles["default"].rpms = set(["alfa", "alfa-subpackage"])
+        mmd.profiles["minimal"].rpms = set(["alfa"])
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True

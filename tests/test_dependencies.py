@@ -44,6 +44,11 @@ class TestDependencies(unittest.TestCase):
         self.mmd.add_buildrequires("AddBRName", "AddBRVersion")
         self.assertEqual(self.mmd.buildrequires, { "AddBRName" : "AddBRVersion" })
 
+    def test_add_buildrequires_numeric(self):
+        self.mmd.buildrequires = dict()
+        self.mmd.buildrequires = { "AddBRNumeric" : 1 }
+        self.assertEqual(self.mmd.buildrequires, { "AddBRNumeric" : "1" })
+
     def test_update_buildrequires(self):
         self.mmd.buildrequires = dict()
         self.mmd.update_buildrequires("UpdateBRName", "UpdateBRVersion")
@@ -64,6 +69,11 @@ class TestDependencies(unittest.TestCase):
         self.mmd.requires = dict()
         self.mmd.add_requires("AddRName", "AddRVersion")
         self.assertEqual(self.mmd.requires, { "AddRName" : "AddRVersion" })
+
+    def test_add_requires_numeric(self):
+        self.mmd.requires = dict()
+        self.mmd.requires = { "AddRNumeric" : 1 }
+        self.assertEqual(self.mmd.requires, { "AddRNumeric" : "1" })
 
     def test_update_requires(self):
         self.mmd.requires = dict()
