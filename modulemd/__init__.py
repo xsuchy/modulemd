@@ -52,6 +52,8 @@ supported_mdversions = ( 0, )
 class ModuleMetadata(object):
     """Class representing the whole module."""
 
+    REPODATA_FILENAME = "modulemd"
+
     def __init__(self):
         """Creates a new ModuleMetadata instance."""
         self.mdversion = max(supported_mdversions)
