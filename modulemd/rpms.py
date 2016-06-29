@@ -34,6 +34,7 @@ class ModuleRPMs(ModuleContent):
         self._dependencies = False
         self._api = set()
         self._packages = dict()
+        self._filter = list()
 
     def add_package(self, p, rationale="", commit=None, repository=None, cache=None, arches=None, multilib=None):
         """Adds a package to the package list.
@@ -89,6 +90,39 @@ class ModuleRPMs(ModuleContent):
     @dependencies.setter
     def dependencies(self, b):
         self._dependencies = bool(b)
+
+    @property
+    def filter(self):
+        """A list of binary package names to be filtered out
+        """
+        return self._filter
+
+    @filter.setter
+    def filter(self, s):
+#        raise TypeError("KH 1: ", s)
+        if not isinstance(s, list):
+            raise TypeError("filter requires a list")
+        self._filter = s
+
+    def add_filter(self, s):
+        """Adds a string to the list of filters
+
+        :param str s: RPM binary package name
+        """
+        self._filter.add(str(s))
+
+    update_filter = add_filter
+
+    def del_filter(self, s):
+        """Remove the supplied binary package name from the list of filters.
+
+        :param str s: RPM binary package name
+        """
+        self._filter.remove(str(s))
+
+    def clear_filter(self):
+        """Clears the RPM package name filter list."""
+        self._filter[:] = []
 
     @property
     def api(self):

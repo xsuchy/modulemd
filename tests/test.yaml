@@ -38,6 +38,8 @@ data:
                         api:
                                 - alfa
                                 - alfa-extras
+                        filter:
+                                - glibc
                         packages:
                                 alfa:
                                         rationale: alfa rationale
