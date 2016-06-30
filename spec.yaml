@@ -95,7 +95,6 @@ data:
                 # RPM content of the module, optional
                 # NOTE: This is currently being investigated
                 # TODO: Package priority build order support (chainbuild)
-                # TODO: Binary package filtering (inclusive or exclusive) support
                 # TODO: Component tags:
                 # http://taiga.fedorainfracloud.org/project/modularity/us/186
                 # http://taiga.fedorainfracloud.org/project/modularity/us/187
