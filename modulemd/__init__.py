@@ -234,8 +234,6 @@ class ModuleMetadata(object):
                 if self.components.rpms.filter:
                     data["data"]["components"]["rpms"]["filter"] = \
                         self.components.rpms.filter
-#KH XXX is this list correct ?
-#                        list(self.components.rpms.filter)
         return yaml.dump(data)
 
     def validate(self):
