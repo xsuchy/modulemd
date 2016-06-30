@@ -2,3 +2,4 @@
 *.pyo
 modulemd.egg-info
 tests/dump.yaml
+dist

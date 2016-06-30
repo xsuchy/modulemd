@@ -9,7 +9,7 @@ def read(f):
 
 setup(
     name = "modulemd",
-    version = "0",
+    version = "0.1",
     author = "Petr Šabata",
     author_email = "contyk@redhat.com",
     description = ("A python3 library for manipulation of the proposed "
