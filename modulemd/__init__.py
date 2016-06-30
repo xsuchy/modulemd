@@ -148,8 +148,6 @@ class ModuleMetadata(object):
                 if "filter" in yml["data"]["components"]["rpms"]:
                     self.components.rpms.filter = \
                         set(yml["data"]["components"]["rpms"]["filter"])
-                else:
-                    self.components.rpms.filter = set()
 
     def dump(self, f):
         """Dumps the metadata into the supplied file.
