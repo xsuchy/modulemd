@@ -147,9 +147,9 @@ class ModuleMetadata(object):
                         self.components.rpms.add_package(p, **extras)
                 if "filter" in yml["data"]["components"]["rpms"]:
                     self.components.rpms.filter = \
-                        yml["data"]["components"]["rpms"]["filter"]
+                        set(yml["data"]["components"]["rpms"]["filter"])
                 else:
-                    self.components.rpms.filter = []
+                    self.components.rpms.filter = set()
 
     def dump(self, f):
         """Dumps the metadata into the supplied file.
@@ -233,7 +233,7 @@ class ModuleMetadata(object):
                             extra
                 if self.components.rpms.filter:
                     data["data"]["components"]["rpms"]["filter"] = \
-                        self.components.rpms.filter
+                        list(self.components.rpms.filter)
         return yaml.dump(data)
 
     def validate(self):
@@ -307,8 +307,11 @@ class ModuleMetadata(object):
             for a in self.components.rpms.api:
                 if not isinstance(a, str):
                     raise TypeError("rpms.api must be a set of strings")
-            if not isinstance(self.components.rpms.filter, list):
-                raise TypeError("rpms.filter must be a list")
+            if not isinstance(self.components.rpms.filter, set):
+                raise TypeError("rpms.filter must be a set")
+            for a in self.components.rpms.filter:
+                if not isinstance(a, str):
+                    raise TypeError("rpms.filter must be a set of strings")
             if self.components.rpms.packages:
                 if not isinstance(self.components.rpms.packages, dict):
                     raise TypeError("rpms.packages must be a dictionary")

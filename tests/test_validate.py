@@ -217,5 +217,45 @@ class TestValidate(unittest.TestCase):
         self.mmd.components.rpms._packages = { "foo" : { "rationale" : "", "cache" : 1 } }
         self.assertRaises(TypeError, self.mmd.validate)
 
+    def test_validate_rpms_api1(self):
+        self.mmd.components.rpms._api = None
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_api2(self):
+        self.mmd.components.rpms._api = 42
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_api3(self):
+        self.mmd.components.rpms._api = "foo"
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_api4(self):
+        self.mmd.components.rpms._api = [ "foo", "bar" ]
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_api5(self):
+        self.mmd.components.rpms._api = { "foo", 1 }
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_filter1(self):
+        self.mmd.components.rpms._filter = None
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_filter2(self):
+        self.mmd.components.rpms._filter = 42
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_filter3(self):
+        self.mmd.components.rpms._filter = "foo"
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_filter4(self):
+        self.mmd.components.rpms._filter = [ "foo", "bar" ]
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_rpms_filter5(self):
+        self.mmd.components.rpms._filter = { "foo", 1 }
+        self.assertRaises(TypeError, self.mmd.validate)
+
 if __name__ == "__main__":
     unittest.main()

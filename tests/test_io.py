@@ -66,6 +66,8 @@ class TestIO(unittest.TestCase):
                           "commit" : "foxtrot",
                           "repository" : "golf",
                           "cache" : "hotel" } } )
+        self.assertEqual(mmd.components.rpms.filter,
+            set([ "filter_1", "filter_2" ]))
 
     def test_loads(self, yaml=None):
         mmd = modulemd.ModuleMetadata()
@@ -115,6 +117,9 @@ class TestIO(unittest.TestCase):
                                 commit: foxtrot
                                 repository: golf
                                 cache: hotel
+                        filter:
+                               - filter_1
+                               - filter_2
         """
         if not yaml:
             yaml = document
@@ -147,6 +152,8 @@ class TestIO(unittest.TestCase):
                           "commit" : "foxtrot",
                           "repository" : "golf",
                           "cache" : "hotel" } } )
+        self.assertEqual(mmd.components.rpms.filter,
+            set([ "filter_1", "filter_2" ]))
 
     def test_dump(self):
         mmd = modulemd.ModuleMetadata()
@@ -177,6 +184,8 @@ class TestIO(unittest.TestCase):
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
             commit="foxtrot", repository="golf", cache="hotel")
+        mmd.components.rpms.add_filter("filter_1")
+        mmd.components.rpms.add_filter("filter_2")
         mmd.dump("tests/dump.yaml")
         self.test_load(filename="tests/dump.yaml")
 
@@ -209,6 +218,8 @@ class TestIO(unittest.TestCase):
         mmd.components.rpms.add_package("bravo", rationale="bravo rationale",
             arches=["charlie", "delta"], multilib=["echo"],
             commit="foxtrot", repository="golf", cache="hotel")
+        mmd.components.rpms.add_filter("filter_1")
+        mmd.components.rpms.add_filter("filter_2")
         self.test_loads(yaml=mmd.dumps())
 
 if __name__ == "__main__":

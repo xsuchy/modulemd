@@ -39,7 +39,8 @@ data:
                                 - alfa
                                 - alfa-extras
                         filter:
-                                - glibc
+                                - filter_1
+                                - filter_2
                         packages:
                                 alfa:
                                         rationale: alfa rationale

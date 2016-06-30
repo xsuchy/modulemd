@@ -58,6 +58,7 @@ class TestBasic(unittest.TestCase):
         cls.mmd.components.rpms.dependencies = True
         cls.mmd.components.rpms.api = set([ "api" ])
         cls.mmd.components.rpms.packages = { "rpm" : { "rationale" : "" } }
+        cls.mmd.components.rpms.filter = set([ "filter_1", "filter_2" ])
 
     def test_mdversion(self):
         self.assertIn(self.mmd.mdversion, modulemd.supported_mdversions)
@@ -121,6 +122,9 @@ class TestBasic(unittest.TestCase):
 
     def test_rpm_packages(self):
         self.assertEqual(self.mmd.components.rpms.packages, { "rpm" : { "rationale" : "" } })
+
+    def test_rpm_filter(self):
+        self.assertEqual(self.mmd.components.rpms.filter, set([ "filter_1", "filter_2" ]))
 
 if __name__ == "__main__":
     unittest.main()

@@ -115,5 +115,20 @@ class TestRPMs(unittest.TestCase):
         self.mr.clear_api()
         self.assertEqual(self.mr.api, set([]))
 
+    def test_add_filter(self):
+        self.assertNotIn("AddRPMAPI", self.mr.filter)
+        self.mr.add_filter("AddRPMAPI")
+        self.assertIn("AddRPMAPI", self.mr.filter)
+
+    def test_del_filter(self):
+        self.mr.filter = set(["DelRPMAPI"])
+        self.mr.del_filter("DelRPMAPI")
+        self.assertNotIn("DelRPMAPI", self.mr.filter)
+
+    def test_clear_filter(self):
+        self.mr.filter = set(["ClearRPMAPI"])
+        self.mr.clear_filter()
+        self.assertEqual(self.mr.filter, set([]))
+
 if __name__ == "__main__":
     unittest.main()
