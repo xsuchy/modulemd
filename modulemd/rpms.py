@@ -53,30 +53,28 @@ class ModuleRPMs(ModuleContent):
         :type multilib: list or None
         :raises TypeError: If the supplied data type is invalid
         """
-        pkgs = self._packages
-        pkgs[p] = dict()
-        pkgs[p]["rationale"] = rationale
+        self._packages.setdefault(p, dict())
+        self._packages[p].setdefault("rationale", rationale)
         if commit:
             if not isinstance(commit, str):
                 raise TypeError("commit must be a string")
-            pkgs[p]["commit"] = commit
+            self._packages[p]["commit"] = commit
         if repository:
             if not isinstance(repository, str):
                 raise TypeError("repository must be a string")
-            pkgs[p]["repository"] = repository
+            self._packages[p]["repository"] = repository
         if cache:
             if not isinstance(cache, str):
                 raise TypeError("cache must be a string")
-            pkgs[p]["cache"] = cache
+            self._packages[p]["cache"] = cache
         if arches:
             if not isinstance(arches, list):
                 raise TypeError("arches requires a list")
-            pkgs[p]["arches"] = arches
+            self._packages[p]["arches"] = arches
         if multilib:
             if not isinstance(multilib, list):
                 raise TypeError("multilib requires a list")
-            pkgs[p]["multilib"] = multilib
-        self.packages = pkgs
+            self._packages[p]["multilib"] = multilib
 
     update_package = add_package
 

@@ -55,10 +55,8 @@ class ModuleContent(object):
         """
         if not isinstance(rationale, str):
             raise TypeError("rationale must be a string")
-        pkgs = self._packages
-        pkgs[p] = dict()
-        pkgs[p]["rationale"] = rationale
-        self.packages = pkgs
+        self._packages.setdefault(p, dict())
+        self._packages[p].setdefault("rationale", rationale)
 
     update_package = add_package
 
