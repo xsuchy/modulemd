@@ -2,7 +2,7 @@
 
 Name:           modulemd
 Version:        0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Module metadata manipulation library
 License:        MIT
 URL:            https://pagure.io/fm-metadata
@@ -55,6 +55,9 @@ Requires:       python3-PyYAML
 %{python3_sitelib}/*
 
 %changelog
+* Sat Jul 09 2016 Petr Šabata <contyk@redhat.com> - 0-8
+- rpms.update_package() now allows updating just one property
+
 * Thu Jun 30 2016 Petr Šabata <contyk@redhat.com> - 0-7
 - Adding support for binary package filters
 
