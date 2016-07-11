@@ -23,7 +23,7 @@
 #
 # Written by Petr Šabata <contyk@redhat.com>
 
-supported_content = ( "rpms", )
+supported_content = ( "rpms" )
 
 class ModuleProfile(object):
     """Class representing a particular module profile."""
@@ -31,6 +31,7 @@ class ModuleProfile(object):
     def __init__(self):
         """Creates a new ModuleProfile instance."""
         self.rpms = set()
+        self.description = ""
 
     @property
     def rpms(self):
@@ -60,3 +61,13 @@ class ModuleProfile(object):
     def clear_rpms(self):
         """Clear the profile binary RPM package set."""
         self._rpms.clear()
+
+    @property
+    def description(self):
+        """A string property representing a detailed description of the
+        profile."""
+        return self._description
+
+    @description.setter
+    def description(self, s):
+        self._description = str(s)

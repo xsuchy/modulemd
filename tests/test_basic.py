@@ -53,6 +53,7 @@ class TestBasic(unittest.TestCase):
         cls.mmd.xmd = { "key" : "value" }
         cls.mmd.profiles = { "default" : modulemd.ModuleProfile() }
         cls.mmd.profiles["default"].rpms = set([ "prof", "ile" ])
+        cls.mmd.profiles["default"].description = "Default set of packages"
         cls.mmd.components = modulemd.ModuleComponents()
         cls.mmd.components.rpms = modulemd.ModuleRPMs()
         cls.mmd.components.rpms.dependencies = True
@@ -107,6 +108,7 @@ class TestBasic(unittest.TestCase):
 
     def test_profiles_rpms(self):
         self.assertEqual(self.mmd.profiles["default"].rpms, set(["prof", "ile"]))
+        self.assertEqual(self.mmd.profiles["default"].description, "Default set of packages")
 
     def test_components(self):
         self.assertIsInstance(self.mmd.components, modulemd.ModuleComponents)

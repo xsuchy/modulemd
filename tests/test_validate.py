@@ -157,6 +157,16 @@ class TestValidate(unittest.TestCase):
         self.mmd.profiles["foo"]._rpms = set([1, 2, 3])
         self.assertRaises(TypeError, self.mmd.validate)
 
+    def test_validate_profiles6(self):
+        self.mmd.profiles = { "foo" : modulemd.ModuleProfile() }
+        self.mmd.profiles["foo"]._description = {}
+        self.assertRaises(TypeError, self.mmd.validate)
+
+    def test_validate_profiles7(self):
+        self.mmd.profiles = { "foo" : modulemd.ModuleProfile() }
+        self.mmd.profiles["foo"]._description = 1
+        self.assertRaises(TypeError, self.mmd.validate)
+
     def test_validate_components(self):
         self.mmd._components = None
         self.assertRaises(TypeError, self.mmd.validate)

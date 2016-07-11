@@ -88,6 +88,9 @@ data:
                 # an undefined profile name?  Should we fall back
                 # to "default" or just assume an empty list?
                 minimal:
+                        # A verbose description of the module, optional
+                        description: >
+                                Minimal profile installing only the bar package.
                         rpms:
                                 - bar
         # Functional components of the module, optional

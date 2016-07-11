@@ -30,6 +30,7 @@ data:
                                 - alfa
                                 - alfa-subpackage
                 minimal:
+                        description: Minimal profile installing only the alfa package.
                         rpms:
                                 - alfa
         components:

@@ -55,6 +55,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertEqual(sorted(mmd.profiles.keys()), ["default", "minimal"])
         self.assertEqual(mmd.profiles["default"].rpms, set(["alfa", "alfa-subpackage"]))
+        self.assertEqual(mmd.profiles["minimal"].description, "Minimal profile installing only the alfa package.")
         self.assertEqual(mmd.profiles["minimal"].rpms, set(["alfa"]))
         self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
@@ -99,6 +100,7 @@ class TestIO(unittest.TestCase):
                             - alfa
                             - alfa-subpackage
                     minimal:
+                        description: Minimal profile installing only the alfa package.
                         rpms:
                             - alfa
                 components:
@@ -141,6 +143,8 @@ class TestIO(unittest.TestCase):
         self.assertEqual(mmd.xmd, { "userid" : "userdata" })
         self.assertEqual(sorted(mmd.profiles.keys()), ["default", "minimal"])
         self.assertEqual(mmd.profiles["default"].rpms, set(["alfa", "alfa-subpackage"]))
+        self.assertEqual(mmd.profiles["minimal"].description,
+                         "Minimal profile installing only the alfa package.")
         self.assertEqual(mmd.profiles["minimal"].rpms, set(["alfa"]))
         self.assertTrue(mmd.components.rpms.dependencies)
         self.assertEqual(mmd.components.rpms.api, set(["alfa", "alfa-extras"]))
@@ -175,6 +179,7 @@ class TestIO(unittest.TestCase):
         mmd.profiles = { "default" : modulemd.ModuleProfile(), "minimal" : modulemd.ModuleProfile() }
         mmd.profiles["default"].rpms = set(["alfa", "alfa-subpackage"])
         mmd.profiles["minimal"].rpms = set(["alfa"])
+        mmd.profiles["minimal"].description = "Minimal profile installing only the alfa package."
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True
@@ -209,6 +214,7 @@ class TestIO(unittest.TestCase):
         mmd.profiles = { "default" : modulemd.ModuleProfile(), "minimal" : modulemd.ModuleProfile() }
         mmd.profiles["default"].rpms = set(["alfa", "alfa-subpackage"])
         mmd.profiles["minimal"].rpms = set(["alfa"])
+        mmd.profiles["minimal"].description = "Minimal profile installing only the alfa package."
         mmd.components = modulemd.ModuleComponents()
         mmd.components.rpms = modulemd.ModuleRPMs()
         mmd.components.rpms.dependencies = True

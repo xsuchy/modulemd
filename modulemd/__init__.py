@@ -119,6 +119,9 @@ class ModuleMetadata(object):
         if "profiles" in yml["data"]:
             for profile in yml["data"]["profiles"].keys():
                 self.profiles[profile] = ModuleProfile()
+                if "description" in yml["data"]["profiles"][profile]:
+                    self.profiles[profile].description = \
+                        str(yml["data"]["profiles"][profile]["description"])
                 if "rpms" in yml["data"]["profiles"][profile]:
                     self.profiles[profile].rpms = \
                         set(yml["data"]["profiles"][profile]["rpms"])
@@ -202,8 +205,14 @@ class ModuleMetadata(object):
         if self.profiles:
             data["data"]["profiles"] = dict()
             for profile in self.profiles.keys():
+                if self.profiles[profile].description:
+                    if not profile in data["data"]["profiles"]:
+                        data["data"]["profiles"][profile] = dict()
+                    data["data"]["profiles"][profile]["description"] = \
+                        str(self.profiles[profile].description)
                 if self.profiles[profile].rpms:
-                    data["data"]["profiles"][profile] = dict()
+                    if not profile in data["data"]["profiles"]:
+                        data["data"]["profiles"][profile] = dict()
                     data["data"]["profiles"][profile]["rpms"] = \
                         list(self.profiles[profile].rpms)
         if self.components:
@@ -290,6 +299,8 @@ class ModuleMetadata(object):
                 raise TypeError("profiles keys must be strings")
             if not isinstance(self.profiles[p], ModuleProfile):
                 raise TypeError("profiles values must be instances of ModuleProfile")
+            if not isinstance(self.profiles[p].description, str):
+                raise TypeError("profile description must be string")
             if not isinstance(self.profiles[p].rpms, set):
                 raise TypeError("profile rpms must be sets")
             for ps in self.profiles[p].rpms:
