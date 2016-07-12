@@ -306,58 +306,60 @@ class ModuleMetadata(object):
             for ps in self.profiles[p].rpms:
                 if not isinstance(ps, str):
                     raise TypeError("profile rpms must be sets of strings")
-        if not isinstance(self.components, ModuleComponents):
+        if not isinstance(self.components, ModuleComponents) \
+           and self.components is not None:
             raise TypeError("components must be an instance of ModuleComponents")
-        if self.components.rpms:
-            if not isinstance(self.components.rpms, ModuleRPMs):
-                raise TypeError("rpms must be an instance of ModuleRPMs")
-            if not isinstance(self.components.rpms.dependencies, bool):
-                raise TypeError("rpms.dependencies must be a boolean")
-            if not isinstance(self.components.rpms.api, set):
-                raise TypeError("rpms.api must be a set")
-            for a in self.components.rpms.api:
-                if not isinstance(a, str):
-                    raise TypeError("rpms.api must be a set of strings")
-            if not isinstance(self.components.rpms.filter, set):
-                raise TypeError("rpms.filter must be a set")
-            for a in self.components.rpms.filter:
-                if not isinstance(a, str):
-                    raise TypeError("rpms.filter must be a set of strings")
-            if self.components.rpms.packages:
-                if not isinstance(self.components.rpms.packages, dict):
-                    raise TypeError("rpms.packages must be a dictionary")
-                for p, e in self.components.rpms.packages.items():
-                    if not isinstance(p, str):
-                        raise TypeError("rpms.packages keys must be strings")
-                    if not isinstance(e, dict):
-                        raise TypeError("rpms.packages values must dictionaries")
-                    for k, v in e.items():
-                        if not isinstance(k, str):
-                            raise TypeError("rpms extras keys must be strings")
-                        if k == "rationale" and v:
-                            if not isinstance(v, str):
-                                raise TypeError("rpms rationale must be a string")
-                        if k == "commit" and v:
-                            if not isinstance(v, str):
-                                raise TypeError("rpms commit must be a string")
-                        if k == "repository" and v:
-                            if not isinstance(v, str):
-                                raise TypeError("rpms repository must be a string")
-                        if k == "cache" and v:
-                            if not isinstance(v, str):
-                                raise TypeError("rpms cache must be a string")
-                        if k == "arches" and v:
-                            if not isinstance(v, list):
-                                raise TypeError("rpms arches must be a list")
-                            for s in v:
-                                if not isinstance(s, str):
-                                    raise TypeError("arches must be a list of strings")
-                        if k == "multilib" and v:
-                            if not isinstance(v, list):
-                                raise TypeError("rpms multilib must be a list")
-                            for s in v:
-                                if not isinstance(s, str):
-                                    raise TypeError("multilib must be a list of strings")
+        if self.components:
+            if self.components.rpms:
+                if not isinstance(self.components.rpms, ModuleRPMs):
+                    raise TypeError("rpms must be an instance of ModuleRPMs")
+                if not isinstance(self.components.rpms.dependencies, bool):
+                    raise TypeError("rpms.dependencies must be a boolean")
+                if not isinstance(self.components.rpms.api, set):
+                    raise TypeError("rpms.api must be a set")
+                for a in self.components.rpms.api:
+                    if not isinstance(a, str):
+                        raise TypeError("rpms.api must be a set of strings")
+                if not isinstance(self.components.rpms.filter, set):
+                    raise TypeError("rpms.filter must be a set")
+                for a in self.components.rpms.filter:
+                    if not isinstance(a, str):
+                        raise TypeError("rpms.filter must be a set of strings")
+                if self.components.rpms.packages:
+                    if not isinstance(self.components.rpms.packages, dict):
+                        raise TypeError("rpms.packages must be a dictionary")
+                    for p, e in self.components.rpms.packages.items():
+                        if not isinstance(p, str):
+                            raise TypeError("rpms.packages keys must be strings")
+                        if not isinstance(e, dict):
+                            raise TypeError("rpms.packages values must dictionaries")
+                        for k, v in e.items():
+                            if not isinstance(k, str):
+                                raise TypeError("rpms extras keys must be strings")
+                            if k == "rationale" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms rationale must be a string")
+                            if k == "commit" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms commit must be a string")
+                            if k == "repository" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms repository must be a string")
+                            if k == "cache" and v:
+                                if not isinstance(v, str):
+                                    raise TypeError("rpms cache must be a string")
+                            if k == "arches" and v:
+                                if not isinstance(v, list):
+                                    raise TypeError("rpms arches must be a list")
+                                for s in v:
+                                    if not isinstance(s, str):
+                                        raise TypeError("arches must be a list of strings")
+                            if k == "multilib" and v:
+                                if not isinstance(v, list):
+                                    raise TypeError("rpms multilib must be a list")
+                                for s in v:
+                                    if not isinstance(s, str):
+                                        raise TypeError("multilib must be a list of strings")
         if not self.name:
             raise ValueError("name is required")
         if not self.version:
@@ -370,10 +372,11 @@ class ModuleMetadata(object):
             raise ValueError("description is required")
         if not self.module_licenses:
             raise ValueError("at least one module license is required")
-        if self.components.rpms:
-            for p, e in self.components.rpms.packages.items():
-                if not "rationale" in e:
-                    raise ValueError(p, "has no rationale")
+        if self.components:
+            if self.components.rpms:
+                for p, e in self.components.rpms.packages.items():
+                    if not "rationale" in e:
+                        raise ValueError(p, "has no rationale")
         # TODO: Validate dependency version formats
         return True
 
