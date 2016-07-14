@@ -68,8 +68,8 @@ data:
         # Profiles define the end user's use cases for the module
         # and consist of package lists of components to
         # be installed by default if this module is enabled.
-        # They keys here are the profile names and contain package
-        # lists by component type.  See the example.
+        # The keys here are the profile names and contain package
+        # lists by component type. See the example.
         # Optional, defaults to no profile definitions.
         # TODO: Profiles deserve detailed documentation.
         profiles:
