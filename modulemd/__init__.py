@@ -243,7 +243,7 @@ class ModuleMetadata(object):
                 if self.components.rpms.filter:
                     data["data"]["components"]["rpms"]["filter"] = \
                         list(self.components.rpms.filter)
-        return yaml.dump(data)
+        return yaml.safe_dump(data)
 
     def validate(self):
         """Performs an in-depth validation of the metadata instance.
