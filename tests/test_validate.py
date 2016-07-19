@@ -168,7 +168,7 @@ class TestValidate(unittest.TestCase):
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_components(self):
-        self.mmd._components = None
+        self.mmd._components = 1
         self.assertRaises(TypeError, self.mmd.validate)
 
     def test_validate_rpms(self):
