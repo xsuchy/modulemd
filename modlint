@@ -1,0 +1,23 @@
+#!/usr/bin/python3
+import modulemd
+import sys
+
+def usage():
+    print("Usage: modlint <file>")
+    sys.exit()
+
+if (len(sys.argv) != 2):
+    usage()
+
+filename = sys.argv[1]
+modulemd = modulemd.ModuleMetadata()
+
+try:
+    modulemd.load(filename)
+    modulemd.validate()
+except Exception as e:
+    # raise
+    print("ERROR: ", str(e))
+    sys.exit()
+
+print("If you got this far, it's all okay ;)")
