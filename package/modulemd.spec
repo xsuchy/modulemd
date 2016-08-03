@@ -2,7 +2,7 @@
 
 Name:           modulemd
 Version:        0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Module metadata manipulation library
 License:        MIT
 URL:            https://pagure.io/fm-metadata
@@ -31,6 +31,14 @@ Requires:       python3-PyYAML
 %description -n python3-%{name}
 %{_pkgdescription}
 
+%package -n modlint
+Summary:        Tool for checking common errors in modulemd files
+Requires:       PyYAML
+Provides:       python-%{name} = %{version}-%{release}
+
+%description -n modlint
+modlint is a tool for checking common errors in modulemd files.
+
 %prep
 %setup -q
 
@@ -54,7 +62,14 @@ Requires:       python3-PyYAML
 %doc README.rst spec.yaml
 %{python3_sitelib}/*
 
+%files -n modlint
+%doc README.rst spec.yaml
+%{_bindir}/modlint
+
 %changelog
+* Wed Aug 03 2016 Jan Kaluza <jkaluza@redhat.com> - 0-11
+- Add modlint subpackage
+
 * Tue Jul 19 2016 Petr Šabata <contyk@redhat.com> - 0-10
 - Don't fail validation tests
 - Use safe_dump() for dumping YAMLs

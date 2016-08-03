@@ -18,6 +18,7 @@ setup(
     keywords = "modularization,modularity,module,metadata",
     url = "https://pagure.io/fm-metadata",
     packages = ["modulemd", "tests"],
+    scripts = ["modlint"],
     long_description = read("README.rst"),
     classifiers = [
         "Development Status :: 3 - Alpha",
