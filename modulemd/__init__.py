@@ -94,13 +94,22 @@ class ModuleMetadata(object):
         if yml["version"] not in supported_mdversions:
             raise ValueError("The supplied metadata version isn't supported")
         self.mdversion = yml["version"]
-        self.name = yml["data"]["name"]
-        self.version = yml["data"]["version"]
-        self.release = yml["data"]["release"]
-        self.summary = yml["data"]["summary"]
-        self.description = str(yml["data"]["description"]).strip()
-        self.module_licenses = set(yml["data"]["license"]["module"])
-        if "content" in yml["data"]["license"]:
+        if not "data" in yml:
+            return
+        if "name" in yml["data"]:
+            self.name = yml["data"]["name"]
+        if "version" in yml["data"]:
+            self.version = yml["data"]["version"]
+        if "release" in yml["data"]:
+            self.release = yml["data"]["release"]
+        if "summary" in yml["data"]:
+            self.summary = yml["data"]["summary"]
+        if "description" in yml["data"]:
+            self.description = str(yml["data"]["description"]).strip()
+        if ("license" in yml["data"] and yml["data"]["license"]
+            and "module" in yml["data"]["license"]):
+            self.module_licenses = set(yml["data"]["license"]["module"])
+        if yml["data"]["license"] and "content" in yml["data"]["license"]:
             self.content_licenses = set(yml["data"]["license"]["content"])
         if "dependencies" in yml["data"]:
             if "buildrequires" in yml["data"]["dependencies"]:

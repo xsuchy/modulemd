@@ -20,4 +20,4 @@ except Exception as e:
     print("ERROR: ", str(e))
     sys.exit()
 
-print("If you got this far, it's all okay ;)")
+print("Everything is OK!")
