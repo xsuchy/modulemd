@@ -299,8 +299,10 @@ class ModuleMetadata(object):
             raise TypeError("documentation must be a string")
         if not isinstance(self.tracker, str):
             raise TypeError("tracker must be a string")
-        if not isinstance(self.xmd, dict):
-            raise TypeError("xmd must be a dictionary")
+        if self.xmd is not None and not isinstance(self.xmd, dict):
+            raise TypeError(
+                "xmd must be a dictionary or null, current value: {!r}".format(self.xmd)
+            )
         if not isinstance(self.profiles, dict):
             raise TypeError("profiles must be a dictionary")
         for p in self.profiles.keys():
