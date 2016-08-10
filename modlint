@@ -1,23 +1,85 @@
 #!/usr/bin/python3
-import modulemd
+
+
+import argparse
+from typing import Generator
 import sys
 
-def usage():
-    print("Usage: modlint <file>")
-    sys.exit()
+import requests
+from modulemd import ModuleMetadata
 
-if (len(sys.argv) != 2):
-    usage()
 
-filename = sys.argv[1]
-modulemd = modulemd.ModuleMetadata()
+def existing_content(mmd: ModuleMetadata) -> Generator[str, None, None]:
+    """Check that rpm content points to existing repo (commit).
 
-try:
-    modulemd.load(filename)
-    modulemd.validate()
-except Exception as e:
-    # raise
-    print("ERROR: ", str(e))
-    sys.exit()
+    For each package in the module, this function queries the dist-git
+    and use the status code for determining if the package (and
+    optionally commit) exists.
 
-print("Everything is OK!")
+    Keyword arguments:
+        mmd -- The checked module metadata object.
+
+    Yields:
+        Error messages for invalid packages.
+    """
+
+    ERRORS = {
+        400: 'Bad hash',
+        404: 'Nonexistent rpm',
+    }
+
+    # TODO: Get URL from the metadata
+    CGIT_URL_TEMPLATE = 'http://pkgs.fedoraproject.org/cgit/rpms/{name}.git/commit'
+
+    try:
+        packages = mmd.components.rpms.packages
+    except AttributeError:
+        return None
+
+    for package, details in packages.items():
+        if 'commit' in details:
+            payload = {'id': details['commit']}
+        else:
+            payload = {}
+
+        response = requests.head(
+                CGIT_URL_TEMPLATE.format(name=package),
+                params=payload
+        )
+
+        # XXX: Maybe yield tuple instead?
+        if response.status_code != requests.codes.ok:
+            yield '{pkg [{hash}]: {msg}}'.format(
+                    pkg=package,
+                    hash=(details['commit'] if 'commit' in details else 'HEAD'),
+                    msg=ERRORS[response.status_code]
+            )
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Validate module metadata.')
+
+    # Positional arguments
+    parser.add_argument('file', help='Input metadata file')
+
+    args = parser.parse_args()
+
+    metadata = ModuleMetadata()
+
+    all_went_well = True
+
+    try:
+        metadata.load(args.file)
+        metadata.validate()
+    except Exception as exc:
+        all_went_well = False
+        print('ERROR:', str(exc), file=sys.stderr)
+
+    for error in existing_content(metadata):
+        all_went_well = False
+        print('RPM CONTENT ERROR:', error, file=sys.stderr)
+
+    if all_went_well:
+        print('Everything OK')
+    else:
+        raise SystemExit(1)
