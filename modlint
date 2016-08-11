@@ -70,10 +70,16 @@ if __name__ == '__main__':
 
     try:
         metadata.load(args.file)
+    except ValueError as invalid_input_metadata:
+        message = 'ERROR: Invalid input: {!s}'.format(invalid_input_metadata)
+        raise SystemExit(message)
+
+    try:
         metadata.validate()
-    except Exception as exc:
+    except (TypeError, ValueError) as invalid_metadata_structure:
         all_went_well = False
-        print('ERROR:', str(exc), file=sys.stderr)
+        print('ERROR: Invalid structure:', str(invalid_metadata_structure),
+              file=sys.stderr)
 
     for error in existing_content(metadata):
         all_went_well = False
