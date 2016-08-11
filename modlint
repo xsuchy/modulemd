@@ -49,9 +49,9 @@ def existing_content(mmd: ModuleMetadata) -> Generator[str, None, None]:
 
         # XXX: Maybe yield tuple instead?
         if response.status_code != requests.codes.ok:
-            yield '{pkg [{hash}]: {msg}}'.format(
+            yield '{pkg} [{hash}]: {msg}'.format(
                     pkg=package,
-                    hash=(details['commit'] if 'commit' in details else 'HEAD'),
+                    hash=details.get('commit', 'HEAD'),
                     msg=ERRORS[response.status_code]
             )
 
