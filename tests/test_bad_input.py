@@ -36,20 +36,18 @@ import modulemd
 from yaml.scanner import ScannerError
 
 class TestIO(unittest.TestCase):
-    def test_invalid_yaml(self, yaml=None):
-        mmd = modulemd.ModuleMetadata()
+    def test_invalid_yaml(self):
         document = """
             document: modulemd
             version: 0
             data
         """
-        if not yaml:
-            yaml = document
+        mmd = modulemd.ModuleMetadata()
         self.assertRaisesRegexp(ScannerError,
                                 "could not found expected ':'",
-                                mmd.loads, yaml)
+                                mmd.loads, document)
 
-    def test_object_value(self, yaml = None, value = ""):
+    def test_object_value(self, yaml=None, value=""):
         """
         Replaces $VALUE in the the `yaml` input with the value provided
         in the `value` variable and loads the yaml using modulemd library.
@@ -62,7 +60,7 @@ class TestIO(unittest.TestCase):
         mmd.loads(yaml)
         mmd.validate()
 
-    def test_object_missing(self, yaml = None):
+    def test_object_missing(self, yaml=None):
         """
         Removes the line with the $VALUE from the yaml input and
         loads the yaml using modulemd library.
@@ -70,13 +68,12 @@ class TestIO(unittest.TestCase):
         if not yaml:
             return
 
-        yaml = "\n".join([n for n in yaml.split("\n") if n.find("$VALUE") == -1])
+        yaml = "\n".join(n for n in yaml.split("\n") if "$VALUE" not in n)
         mmd = modulemd.ModuleMetadata()
         mmd.loads(yaml)
         mmd.validate()
 
     def test_document(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: $VALUE
             version: 0
@@ -100,7 +97,6 @@ class TestIO(unittest.TestCase):
                                     self.test_object_value, document, value)
 
     def test_version(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: $VALUE
@@ -123,7 +119,6 @@ class TestIO(unittest.TestCase):
                                     self.test_object_value, document, value)
 
     def test_data(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -137,7 +132,6 @@ class TestIO(unittest.TestCase):
                                     self.test_object_value, document, value)
 
     def test_name(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -155,14 +149,10 @@ class TestIO(unittest.TestCase):
         self.assertRaisesRegexp(ValueError,
                                 "name is required",
                                 self.test_object_missing, document)
-        self.test_object_value(document, "")
-        self.test_object_value(document, "test")
-        self.test_object_value(document, "1")
-        self.test_object_value(document, "[]")
-        self.test_object_value(document, "{}")
+        for value in ["", "test", "[]", "{}", "1"]:
+            self.test_object_value(document, value)
 
     def test_version(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -180,14 +170,10 @@ class TestIO(unittest.TestCase):
         self.assertRaisesRegexp(ValueError,
                                 "version is required",
                                 self.test_object_missing, document)
-        self.test_object_value(document, "")
-        self.test_object_value(document, "test")
-        self.test_object_value(document, "1")
-        self.test_object_value(document, "[]")
-        self.test_object_value(document, "{}")
+        for value in ["", "test", "[]", "{}", "1"]:
+            self.test_object_value(document, value)
 
     def test_release(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -205,14 +191,10 @@ class TestIO(unittest.TestCase):
         self.assertRaisesRegexp(ValueError,
                                 "release is required",
                                 self.test_object_missing, document)
-        self.test_object_value(document, "")
-        self.test_object_value(document, "test")
-        self.test_object_value(document, "1")
-        self.test_object_value(document, "[]")
-        self.test_object_value(document, "{}")
+        for value in ["", "test", "[]", "{}", "1"]:
+            self.test_object_value(document, value)
 
     def test_summary(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -230,14 +212,10 @@ class TestIO(unittest.TestCase):
         self.assertRaisesRegexp(ValueError,
                                 "summary is required",
                                 self.test_object_missing, document)
-        self.test_object_value(document, "")
-        self.test_object_value(document, "test")
-        self.test_object_value(document, "1")
-        self.test_object_value(document, "[]")
-        self.test_object_value(document, "{}")
+        for value in ["", "test", "[]", "{}", "1"]:
+            self.test_object_value(document, value)
 
     def test_description(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -254,14 +232,10 @@ class TestIO(unittest.TestCase):
         self.assertRaisesRegexp(ValueError,
                                 "description is required",
                                 self.test_object_missing, document)
-        self.test_object_value(document, "")
-        self.test_object_value(document, "test")
-        self.test_object_value(document, "1")
-        self.test_object_value(document, "[]")
-        self.test_object_value(document, "{}")
+        for value in ["", "test", "[]", "{}", "1"]:
+            self.test_object_value(document, value)
 
     def test_license(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -290,7 +264,6 @@ class TestIO(unittest.TestCase):
         self.test_object_value(document, "{module: MIT}")
 
     def test_dependencies(self):
-        mmd = modulemd.ModuleMetadata()
         document = """
             document: modulemd
             version: 0
@@ -306,9 +279,7 @@ class TestIO(unittest.TestCase):
                 dependencies: $VALUE
         """
         self.test_object_missing(document)
-
-        values = ["", "test", "1", "[]", "{}"]
-        for value in values:
+        for value in ["", "test", "1", "[]", "{}"]:
             self.test_object_value(document, value)
 
     def test_dependencies_type(self):

@@ -89,14 +89,14 @@ class ModuleMetadata(object):
         :raises ValueError: If the metadata is invalid or unsupported.
         """
         yml = yaml.safe_load(s)
-        if not "document" in yml or yml["document"] != "modulemd":
+        if "document" not in yml or yml["document"] != "modulemd":
             raise ValueError("The supplied data isn't a valid modulemd document")
-        if not "version" in yml:
+        if "version" not in yml:
             raise ValueError("version is required")
         if yml["version"] not in supported_mdversions:
             raise ValueError("The supplied metadata version isn't supported")
         self.mdversion = yml["version"]
-        if not "data" in yml or not isinstance(yml["data"], dict):
+        if "data" not in yml or not isinstance(yml["data"], dict):
             return
         if "name" in yml["data"]:
             self.name = yml["data"]["name"]
@@ -108,18 +108,22 @@ class ModuleMetadata(object):
             self.summary = yml["data"]["summary"]
         if "description" in yml["data"]:
             self.description = str(yml["data"]["description"]).strip()
-        if ("license" in yml["data"] and isinstance(yml["data"]["license"], dict)
-            and "module" in yml["data"]["license"] and yml["data"]["license"]["module"]):
+        if ("license" in yml["data"]
+                and isinstance(yml["data"]["license"], dict)
+                and "module" in yml["data"]["license"]
+                and yml["data"]["license"]["module"]):
             self.module_licenses = set(yml["data"]["license"]["module"])
-        if ("license" in yml["data"] and isinstance(yml["data"]["license"], dict)
-            and "content" in yml["data"]["license"]):
+        if ("license" in yml["data"]
+                and isinstance(yml["data"]["license"], dict)
+                and "content" in yml["data"]["license"]):
             self.content_licenses = set(yml["data"]["license"]["content"])
-        if "dependencies" in yml["data"] and isinstance(yml["data"]["dependencies"], dict):
+        if ("dependencies" in yml["data"]
+                and isinstance(yml["data"]["dependencies"], dict)):
             if ("buildrequires" in yml["data"]["dependencies"]
-                and yml["data"]["dependencies"]["buildrequires"]):
+                    and yml["data"]["dependencies"]["buildrequires"]):
                 self.buildrequires = yml["data"]["dependencies"]["buildrequires"]
             if ("requires" in yml["data"]["dependencies"]
-                and yml["data"]["dependencies"]["requires"]):
+                    and yml["data"]["dependencies"]["requires"]):
                 self.requires = yml["data"]["dependencies"]["requires"]
         if "references" in yml["data"] and yml["data"]["references"]:
             if "community" in yml["data"]["references"]:
@@ -131,7 +135,7 @@ class ModuleMetadata(object):
         if "xmd" in yml["data"]:
             self.xmd = yml["data"]["xmd"]
         if ("profiles" in yml["data"]
-            and isinstance(yml["data"]["profiles"], dict)):
+                and isinstance(yml["data"]["profiles"], dict)):
             for profile in yml["data"]["profiles"].keys():
                 self.profiles[profile] = ModuleProfile()
                 if "description" in yml["data"]["profiles"][profile]:
@@ -141,7 +145,7 @@ class ModuleMetadata(object):
                     self.profiles[profile].rpms = \
                         set(yml["data"]["profiles"][profile]["rpms"])
         if ("components" in yml["data"]
-            and isinstance(yml["data"]["components"], dict)):
+                and isinstance(yml["data"]["components"], dict)):
             self.components = ModuleComponents()
             if "rpms" in yml["data"]["components"]:
                 self.components.rpms = ModuleRPMs()
@@ -222,12 +226,12 @@ class ModuleMetadata(object):
             data["data"]["profiles"] = dict()
             for profile in self.profiles.keys():
                 if self.profiles[profile].description:
-                    if not profile in data["data"]["profiles"]:
+                    if profile not in data["data"]["profiles"]:
                         data["data"]["profiles"][profile] = dict()
                     data["data"]["profiles"][profile]["description"] = \
                         str(self.profiles[profile].description)
                 if self.profiles[profile].rpms:
-                    if not profile in data["data"]["profiles"]:
+                    if profile not in data["data"]["profiles"]:
                         data["data"]["profiles"][profile] = dict()
                     data["data"]["profiles"][profile]["rpms"] = \
                         list(self.profiles[profile].rpms)
@@ -393,7 +397,7 @@ class ModuleMetadata(object):
         if self.components:
             if self.components.rpms:
                 for p, e in self.components.rpms.packages.items():
-                    if not "rationale" in e:
+                    if "rationale" not in e:
                         raise ValueError(p, "has no rationale")
         # TODO: Validate dependency version formats
         return True
