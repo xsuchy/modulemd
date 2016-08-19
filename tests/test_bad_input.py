@@ -50,6 +50,10 @@ class TestIO(unittest.TestCase):
                                 mmd.loads, yaml)
 
     def test_object_value(self, yaml = None, value = ""):
+        """
+        Replaces $VALUE in the the `yaml` input with the value provided
+        in the `value` variable and loads the yaml using modulemd library.
+        """
         if not yaml:
             return
 
@@ -59,6 +63,10 @@ class TestIO(unittest.TestCase):
         mmd.validate()
 
     def test_object_missing(self, yaml = None):
+        """
+        Removes the line with the $VALUE from the yaml input and
+        loads the yaml using modulemd library.
+        """
         if not yaml:
             return
 
