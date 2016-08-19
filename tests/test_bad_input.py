@@ -43,8 +43,10 @@ class TestIO(unittest.TestCase):
             data
         """
         mmd = modulemd.ModuleMetadata()
+        # Python yaml module raises wrong error message with "found" string
+        # instead of "find". We are testing for both variants here.
         self.assertRaisesRegexp(ScannerError,
-                                "could not found expected ':'",
+                                r"could not f(?:ou|i)nd expected ':'",
                                 mmd.loads, document)
 
     def test_object_value(self, yaml=None, value=""):
