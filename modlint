@@ -9,6 +9,36 @@ import requests
 from modulemd import ModuleMetadata
 
 
+class RpmContentError(ValueError):
+    """Metadata contains invalid/nonexistent srpm or commit."""
+
+    REASONS = {
+        400: 'Bad hash',
+        404: 'Nonexistent rpm',
+    }
+    """Mapping of HTTP status codes to actual failure reasons."""
+
+    def __init__(self, package, commit, status_code):
+        super().__init__(self, package, commit, status_code)
+
+        self.package = package
+        self.commit = commit
+        self.status_code = status_code
+
+    def __repr__(self):
+        return 'RpmContentError({pkg}, {commit}, {status})'.format(
+            pkg=self.package,
+            commit=self.commit,
+            status=self.status_code
+        )
+
+    def __str__(self):
+        return '{pkg} [{commit}]: {reason}'.format(
+            pkg=self.package,
+            commit=self.commit,
+            reason=self.REASONS.get(self.status_code, 'Unknown error')
+        )
+
 def existing_content(mmd: ModuleMetadata) -> Generator[str, None, None]:
     """Check that rpm content points to existing repo (commit).
 
