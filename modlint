@@ -85,6 +85,7 @@ def rpm_content(mmd):
     try:
         packages = mmd.components.rpms.packages
     except AttributeError:
+        # Module has no packages -- end generation with no output
         return None
 
     yield from packages.items()
