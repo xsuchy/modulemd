@@ -39,51 +39,56 @@ class RpmContentError(ValueError):
             reason=self.REASONS.get(self.status_code, 'Unknown error')
         )
 
-def existing_content(mmd: ModuleMetadata) -> Generator[str, None, None]:
-    """Check that rpm content points to existing repo (commit).
 
-    For each package in the module, this function queries the dist-git
-    and use the status code for determining if the package (and
-    optionally commit) exists.
+def verify_rpm_content(package, metadata, *, requests=requests):
+    """Verify the existence of dist-git repo for described package.
 
     Keyword arguments:
-        mmd -- The checked module metadata object.
+        package -- Name of the package to verify (key in
+            modulemd packages)
+        metadata -- Metadata associated with the package
+            (value in modulemd packages)
 
-    Yields:
-        Error messages for invalid packages.
+        requests -- Dependency injection of networking library.
+
+    Returns:
+        None if the associated repo exists.
+
+    Raises:
+        RpmContentError -- when the package (or commit) does not exist
+            in dist-git.
     """
-
-    ERRORS = {
-        400: 'Bad hash',
-        404: 'Nonexistent rpm',
-    }
 
     # TODO: Get URL from the metadata
     CGIT_URL_TEMPLATE = 'http://pkgs.fedoraproject.org/cgit/rpms/{name}.git/commit'
+
+    commit = metadata.get('commit', 'HEAD')
+
+    response = requests.head(
+            CGIT_URL_TEMPLATE.format(name=package),
+            params={'id': commit}
+            )
+
+    if response.status_code != requests.codes.ok:
+        raise RpmContentError(package, commit, response.status_code)
+
+
+def rpm_content(mmd):
+    """Generate (package, metadata) pairs from module.
+
+    Keyword arguments:
+        mmd -- ModuleMetadata to be inspected.
+
+    Yields:
+        (package, metadata) from mmd, if any.
+    """
 
     try:
         packages = mmd.components.rpms.packages
     except AttributeError:
         return None
 
-    for package, details in packages.items():
-        if 'commit' in details:
-            payload = {'id': details['commit']}
-        else:
-            payload = {}
-
-        response = requests.head(
-                CGIT_URL_TEMPLATE.format(name=package),
-                params=payload
-        )
-
-        # XXX: Maybe yield tuple instead?
-        if response.status_code != requests.codes.ok:
-            yield '{pkg} [{hash}]: {msg}'.format(
-                    pkg=package,
-                    hash=details.get('commit', 'HEAD'),
-                    msg=ERRORS[response.status_code]
-            )
+    yield from packages.items()
 
 
 if __name__ == '__main__':
@@ -95,25 +100,29 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     metadata = ModuleMetadata()
-
+    metadata_errors = TypeError, ValueError
     all_went_well = True
 
     try:
         metadata.load(args.file)
-    except ValueError as invalid_input_metadata:
+    except metadata_errors as invalid_input_metadata:
         message = 'ERROR: Invalid input: {!s}'.format(invalid_input_metadata)
         raise SystemExit(message)
 
     try:
         metadata.validate()
-    except (TypeError, ValueError) as invalid_metadata_structure:
+    except metadata_errors as invalid_metadata_structure:
         all_went_well = False
         print('ERROR: Invalid structure:', str(invalid_metadata_structure),
               file=sys.stderr)
 
-    for error in existing_content(metadata):
-        all_went_well = False
-        print('RPM CONTENT ERROR:', error, file=sys.stderr)
+    for package in rpm_content(metadata):
+        try:
+            verify_rpm_content(*package)
+        except RpmContentError as invalid_rpm:
+            all_went_well = False
+            print('RPM CONTENT ERROR:', str(invalid_rpm),
+                  file=sys.stderr)
 
     if all_went_well:
         print('Everything OK')
