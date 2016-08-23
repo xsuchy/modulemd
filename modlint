@@ -25,7 +25,7 @@ class RpmContentError(ValueError):
         self.status_code = status_code
 
     def __repr__(self):
-        return 'RpmContentError({pkg}, {commit}, {status})'.format(
+        return 'RpmContentError({pkg!r}, {commit!r}, {status!r})'.format(
             pkg=self.package,
             commit=self.commit,
             status=self.status_code
