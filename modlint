@@ -11,11 +11,11 @@ from modulemd import ModuleMetadata
 class RpmContentError(ValueError):
     """Metadata contains invalid/nonexistent srpm or commit."""
 
+    #: Mapping of HTTP status codes to actual failure reasons.
     REASONS = {
         400: 'Bad hash',
         404: 'Nonexistent rpm',
     }
-    """Mapping of HTTP status codes to actual failure reasons."""
 
     def __init__(self, package, commit, status_code):
         super().__init__(self, package, commit, status_code)
