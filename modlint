@@ -107,7 +107,7 @@ if __name__ == '__main__':
         metadata.load(args.file)
     except metadata_errors as invalid_input_metadata:
         message = 'ERROR: Invalid input: {!s}'.format(invalid_input_metadata)
-        raise SystemExit(message)
+        sys.exit(message)
 
     try:
         metadata.validate()
@@ -127,4 +127,4 @@ if __name__ == '__main__':
     if all_went_well:
         print('Everything OK')
     else:
-        raise SystemExit(1)
+        sys.exit(1)
