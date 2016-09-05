@@ -6,6 +6,8 @@ Release:        11%{?dist}
 Summary:        Module metadata manipulation library
 License:        MIT
 URL:            https://pagure.io/fm-metadata
+# there is no upstream tar file, you can build SRPM directly by running:
+# mock -r fedora-rawhide-x86_64 --scm-enable --scm-option method=git --scm-option package=modulemd --scm-option git_get=set --scm-option spec=package/modulemd.spec    --scm-option branch=master --scm-option write_tar=True --scm-option git_get='git clone https://pagure.io/modulemd.git'
 Source0:        modulemd.tar
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -24,12 +26,16 @@ Provides:       python-%{name} = %{version}-%{release}
 %description -n python2-%{name}
 %{_pkgdescription}
 
+This is python2 bindings.
+
 %package -n python3-%{name}
 Summary:        %{summary}
 Requires:       python3-PyYAML
 
 %description -n python3-%{name}
 %{_pkgdescription}
+
+This is python3 bindings
 
 %package -n modlint
 Summary:        Tool for checking common errors in modulemd files
@@ -56,14 +62,17 @@ modlint is a tool for checking common errors in modulemd files.
 
 %files -n python2-%{name}
 %doc README.rst spec.yaml
+%license LICENSE
 %{python2_sitelib}/*
 
 %files -n python3-%{name}
 %doc README.rst spec.yaml
+%license LICENSE
 %{python3_sitelib}/*
 
 %files -n modlint
 %doc README.rst spec.yaml
+%license LICENSE
 %{_bindir}/modlint
 
 %changelog
